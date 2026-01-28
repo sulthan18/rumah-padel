@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rumah Padel - Booking System
 
-## Getting Started
+Premium padel court booking system built with Next.js 14, Prisma, and Supabase.
 
-First, run the development server:
+## 🎾 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Real-time Booking**: Instant court reservation with calendar interface
+- **Payment Integration**: Midtrans payment gateway (QRIS/VA)
+- **User Dashboard**: View booking history and QR tickets
+- **Admin Panel**: Manage schedules and manual slot blocking
+- **NextAuth**: Google OAuth and email authentication
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + Shadcn UI
+- **Database**: Supabase (PostgreSQL)
+- **ORM**: Prisma (v5.22.0)
+- **Auth**: NextAuth.js
+- **Payment**: Midtrans
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Supabase account
+- Midtrans account (for payment)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/rumah-padel.git
+   cd rumah-padel
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Setup environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Fill in your credentials in `.env`
+
+4. **Push database schema**
+   ```bash
+   npx prisma db push
+   ```
+
+5. **Seed the database**
+   ```bash
+   npm run seed
+   ```
+
+6. **Run development server**
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+
+```
+rumah-padel/
+├── prisma/
+│   ├── schema.prisma          # Database schema
+│   └── seed.ts                # Seed data
+├── src/
+│   ├── app/                   # Next.js app router
+│   ├── components/            # React components
+│   ├── lib/                   # Utilities & configs
+│   └── types/                 # TypeScript types
+└── public/                    # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🗄️ Database Schema
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **User**: Authentication and profile
+- **Court**: Court information and pricing
+- **Booking**: Reservation records with status
+- **Payment**: Payment tracking
+- **Account/Session**: NextAuth tables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎨 Design Optimizations
 
-## Learn More
+- **Int vs Decimal**: Using `Int` for prices to avoid Next.js serialization issues
+- **Indexes**: Composite indexes on `(courtId, startTime, endTime)` for schedule queries
+- **Connection Pooling**: Separate URLs for transactions and migrations
 
-To learn more about Next.js, take a look at the following resources:
+## 📝 Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run seed` - Seed database with courts
+- `npx prisma studio` - Open Prisma Studio
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔐 Environment Variables
 
-## Deploy on Vercel
+See `.env.example` for required variables.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
+
+---
+
+Built with ❤️ for the padel community

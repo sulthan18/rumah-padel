@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { UserMenu } from "@/components/user-menu"
-import { SITE_NAME, NAV_LINKS } from "@/lib/constants"
+import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -22,7 +22,7 @@ export function Navbar() {
                     <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                         <span className="text-xl font-bold text-primary">R</span>
                     </div>
-                    <span className="text-lg font-bold tracking-tight">{SITE_NAME}</span>
+                    <span className="text-lg font-bold tracking-tight">{SITE_CONFIG.name}</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -57,7 +57,7 @@ export function Navbar() {
                         <SheetContent side="right">
                             <div className="flex flex-col space-y-6 mt-6">
                                 <Link href="/" className="font-bold text-lg" onClick={() => setIsOpen(false)}>
-                                    {SITE_NAME}
+                                    {SITE_CONFIG.name}
                                 </Link>
                                 <div className="flex flex-col space-y-4">
                                     {NAV_LINKS.map((link) => (

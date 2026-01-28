@@ -5,16 +5,16 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: SITE_NAME,
-    template: `%s | ${SITE_NAME}`,
+    default: SITE_CONFIG.name,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: SITE_DESCRIPTION,
+  description: SITE_CONFIG.description,
 };
 
 export default function RootLayout({

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { UserMenu } from "@/components/user-menu"
+import { WelcomeNav } from "@/components/welcome-nav"
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants"
 import { Swords } from "lucide-react"
 import dynamic from "next/dynamic"
@@ -52,7 +53,8 @@ export function Navbar() {
 
                 {/* 3. Zona Kanan: Auth Switch & Mobile Menu */}
                 <div className="flex items-center gap-4">
-                    <div className="hidden md:block">
+                    <div className="hidden md:flex items-center gap-4">
+                        <WelcomeNav />
                         <UserMenu />
                     </div>
 

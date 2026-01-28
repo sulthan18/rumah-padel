@@ -53,7 +53,7 @@ export function Navbar() {
 
                 {/* 3. Zona Kanan: Auth Switch & Mobile Menu */}
                 <div className="flex items-center gap-4">
-                    <div className="hidden md:flex items-center gap-4">
+                    <div className="hidden md:flex items-center gap-4 mr-8">
                         <WelcomeNav />
                         <UserMenu />
                     </div>

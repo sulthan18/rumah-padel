@@ -7,7 +7,7 @@ import { SITE_CONFIG } from "@/constants"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Loader2 } from "lucide-react"
+import { Loader2, Swords } from "lucide-react"
 
 export default function SignUpPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -45,10 +45,10 @@ export default function SignUpPage() {
                 href="/"
                 className="flex items-center gap-2 text-lg font-bold tracking-tight hover:opacity-80 transition-opacity"
             >
-                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <span className="text-xl font-bold text-primary">R</span>
+                <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                    <Swords className="h-5 w-5 text-primary-foreground -rotate-45" />
                 </div>
-                {SITE_CONFIG.name}
+                <span className="text-xl font-bold">{SITE_CONFIG.name}</span>
             </Link>
 
             <Card className="w-full max-w-[400px] shadow-lg">

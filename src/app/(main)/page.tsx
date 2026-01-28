@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Calendar, User, Trophy, Zap, Shield } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,10 +9,18 @@ export default function Home() {
     <div className="flex flex-col min-h-full">
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-zinc-950 text-white">
-        {/* Dynamic Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-zinc-900 to-emerald-900/20 z-0" />
-        {/* Hint of "Padel court" pattern or texture could go here */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900 via-transparent to-transparent" />
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/signup-bg.jpg"
+            alt="Padel Court Background"
+            fill
+            className="object-cover opacity-60"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent" />
+        </div>
 
         <div className="relative z-10 w-full max-w-5xl px-4 text-center space-y-8">
           <div className="space-y-4">

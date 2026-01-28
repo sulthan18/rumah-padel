@@ -18,7 +18,7 @@ export function Navbar() {
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="container flex h-16 items-center justify-between px-4">
+            <div className="w-full h-16 flex items-center justify-between px-6 md:px-8">
 
                 {/* 1. Zona Kiri: Brand Identity */}
                 <Link href="/" className="mr-6 flex items-center space-x-2 hover:opacity-90 transition-opacity">

@@ -17,14 +17,14 @@ export default function SignUpPage() {
     // Redirect if already logged in
     useEffect(() => {
         if (status === "authenticated") {
-            router.push("/dashboard")
+            router.push("/")
         }
     }, [status, router])
 
     const handleGoogleSignUp = async () => {
         setIsLoading(true)
         try {
-            await signIn("google", { callbackUrl: "/dashboard" })
+            await signIn("google", { callbackUrl: "/" })
         } catch (error) {
             console.error("Sign up failed", error)
             setIsLoading(false)

@@ -17,14 +17,14 @@ export default function SignInPage() {
     // Redirect if already logged in
     useEffect(() => {
         if (status === "authenticated") {
-            router.push("/dashboard")
+            router.push("/")
         }
     }, [status, router])
 
     const handleGoogleSignIn = async () => {
         setIsLoading(true)
         try {
-            await signIn("google", { callbackUrl: "/dashboard" })
+            await signIn("google", { callbackUrl: "/" })
         } catch (error) {
             console.error("Login failed", error)
             setIsLoading(false)

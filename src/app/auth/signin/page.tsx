@@ -40,10 +40,10 @@ export default function SignInPage() {
     }
 
     return (
-        <div className="container flex h-screen w-full flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-center justify-center gap-6 p-4">
             <Link
                 href="/"
-                className="mb-8 flex items-center gap-2 text-lg font-bold tracking-tight hover:opacity-80 transition-opacity"
+                className="flex items-center gap-2 text-lg font-bold tracking-tight hover:opacity-80 transition-opacity"
             >
                 <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                     <span className="text-xl font-bold text-primary">R</span>

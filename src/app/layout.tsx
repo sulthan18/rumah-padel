@@ -26,11 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${outfit.className} antialiased min-h-screen flex flex-col`}>
         <Providers>
-          <Navbar />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          {children}
           <Toaster />
         </Providers>
       </body>

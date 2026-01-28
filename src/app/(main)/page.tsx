@@ -12,7 +12,7 @@ export default function Home() {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero-img.jpg"
+            src="/images/hero-bg.jpg"
             alt="Padel Court Background"
             fill
             className="object-cover opacity-60"

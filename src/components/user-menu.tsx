@@ -13,9 +13,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
 import { User, LogOut, Calendar, Zap, History } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function UserMenu() {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
+
+    // 🟡 Loading State
+    if (status === "loading") {
+        return <Skeleton className="h-10 w-10 rounded-full bg-muted" />
+    }
 
     // 🅰️ Guest View
     if (!session) {

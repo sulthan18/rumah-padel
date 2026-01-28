@@ -3,11 +3,16 @@
 import { useSession } from "next-auth/react"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Skeleton } from "@/components/ui/skeleton"
 
-export function WelcomeNav() {
-    const { data: session, status } = useSession()
-    const pathname = usePathname()
+const CAPTIONS = [
+    "Mau main jam berapa hari ini?",
+    "Siap untuk pertandingan seru?",
+    "Lapangan terbaik menantimu!",
+    "Jangan lupa ajak teman mabar!",
+    "Waktunya bakar kalori di lapangan!",
+]
+
+function useGreeting() {
     const [greeting, setGreeting] = useState("")
     const [caption, setCaption] = useState("")
     const [mounted, setMounted] = useState(false)
@@ -24,23 +29,23 @@ export function WelcomeNav() {
         setGreeting(g)
 
         // 2. Random Caption
-        const captions = [
-            "Mau main jam berapa hari ini?",
-            "Siap untuk pertandingan seru?",
-            "Lapangan terbaik menantimu!",
-            "Jangan lupa ajak teman mabar!",
-            "Waktunya bakar kalori di lapangan!",
-        ]
-        // Use a simple hash of the date or random to pick one. Random is fine.
-        setCaption(captions[Math.floor(Math.random() * captions.length)])
+        setCaption(CAPTIONS[Math.floor(Math.random() * CAPTIONS.length)])
     }, [])
 
-    // Only show on Homepage and if Authenticated
+    return { greeting, caption, mounted }
+}
+
+export function WelcomeNav() {
+    const { data: session, status } = useSession()
+    const pathname = usePathname()
+    const { greeting, caption, mounted } = useGreeting()
+
+    // Requirements check: Authenticated AND Homepage
     if (status !== "authenticated" || pathname !== "/") {
         return null
     }
 
-    // Prevent hydration mismatch by returning null or skeleton until mounted
+    // Client-side rendering only check
     if (!mounted) {
         return null
     }

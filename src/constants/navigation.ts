@@ -3,7 +3,7 @@
  * Main menu links
  */
 export const NAV_LINKS = [
-    { label: "Home", href: "/" },
-    { label: "Book Court", href: "/booking" },
-    { label: "About", href: "/about" },
+    { label: "Lapangan", href: "/courts" },
+    { label: "Jadwal & Harga", href: "/pricing" },
+    { label: "Lokasi", href: "/location" },
 ] as const

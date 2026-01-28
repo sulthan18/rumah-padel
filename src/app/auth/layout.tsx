@@ -1,18 +1,25 @@
+"use client"
+
 import Image from "next/image"
 import { Swords } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 export default function AuthLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+    const pathname = usePathname()
+    const isSignUp = pathname === "/auth/signup"
+    const bgImage = isSignUp ? "/images/signup-bg.jpg" : "/images/auth-bg.png"
+
     return (
         <div className="min-h-screen grid lg:grid-cols-2">
             {/* Left: Hero Image (Desktop) */}
             <div className="relative hidden h-full flex-col bg-zinc-900 p-10 text-white lg:flex dark:border-r">
                 <div className="absolute inset-0 overflow-hidden">
                     <Image
-                        src="/images/auth-bg.png"
+                        src={bgImage}
                         alt="Padel Court"
                         fill
                         className="object-cover"
@@ -33,7 +40,10 @@ export default function AuthLayout({
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-4">
                         <p className="text-xl font-medium leading-relaxed">
-                            "Elevate your game on Indonesia's premier padel courts. Join our community of passionate players today."
+                            {isSignUp
+                                ? "\"Join the fastest growing padel community in town. Competitive matches, professional coaching, and premium facilities await.\""
+                                : "\"Elevate your game on Indonesia's premier padel courts. Join our community of passionate players today.\""
+                            }
                         </p>
                     </blockquote>
                 </div>
@@ -44,7 +54,7 @@ export default function AuthLayout({
                 {/* Mobile Background (for small screens) */}
                 <div className="absolute inset-0 lg:hidden">
                     <Image
-                        src="/images/auth-bg.png"
+                        src={bgImage}
                         alt="Background"
                         fill
                         className="object-cover brightness-[0.4]"

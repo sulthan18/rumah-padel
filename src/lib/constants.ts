@@ -64,6 +64,33 @@ export const COURT_TYPES = {
     OUTDOOR: "Outdoor",
 } as const
 
+export const COURTS_DATA = [
+    {
+        id: "court-1",
+        name: "Court 1",
+        description: "Indoor Premium with Glass Walls",
+        pricePerHour: 150000,
+        features: ["Indoor", "AC", "Premium Turf"],
+        type: COURT_TYPES.INDOOR_PREMIUM
+    },
+    {
+        id: "court-2",
+        name: "Court 2",
+        description: "Indoor Premium with LED",
+        pricePerHour: 150000,
+        features: ["Indoor", "LED Lights", "Pro Surface"],
+        type: COURT_TYPES.INDOOR_PREMIUM
+    },
+    {
+        id: "court-3",
+        name: "Court 3",
+        description: "Outdoor Standard",
+        pricePerHour: 120000,
+        features: ["Outdoor", "Night Lighting", "Good Airflow"],
+        type: COURT_TYPES.OUTDOOR
+    }
+] as const
+
 // API Routes
 export const API_ROUTES = {
     bookings: {

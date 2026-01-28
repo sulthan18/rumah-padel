@@ -9,7 +9,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2 } from "lucide-react"
 
-export default function SignInPage() {
+export default function SignUpPage() {
     const [isLoading, setIsLoading] = useState(false)
     const { data: session, status } = useSession()
     const router = useRouter()
@@ -21,12 +21,12 @@ export default function SignInPage() {
         }
     }, [status, router])
 
-    const handleGoogleSignIn = async () => {
+    const handleGoogleSignUp = async () => {
         setIsLoading(true)
         try {
             await signIn("google", { callbackUrl: "/dashboard" })
         } catch (error) {
-            console.error("Login failed", error)
+            console.error("Sign up failed", error)
             setIsLoading(false)
         }
     }
@@ -53,15 +53,15 @@ export default function SignInPage() {
 
             <Card className="w-full max-w-[400px] shadow-lg">
                 <CardHeader className="text-center space-y-2">
-                    <CardTitle className="text-2xl">Welcome Back</CardTitle>
+                    <CardTitle className="text-2xl">Create Account</CardTitle>
                     <CardDescription>
-                        Sign in to book courts and manage your schedule
+                        Join us to book courts and track your games
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4 pt-4">
                     <Button
                         variant="outline"
-                        onClick={handleGoogleSignIn}
+                        onClick={handleGoogleSignUp}
                         disabled={isLoading}
                         className="w-full h-12 text-base font-medium"
                     >
@@ -90,19 +90,19 @@ export default function SignInPage() {
                                         fill="#EA4335"
                                     />
                                 </svg>
-                                Sign in with Google
+                                Sign up with Google
                             </div>
                         )}
                     </Button>
                 </CardContent>
                 <CardFooter className="flex flex-col gap-4 border-t pt-4">
                     <div className="text-center text-sm">
-                        <span className="text-muted-foreground">Don&apos;t have an account? </span>
+                        <span className="text-muted-foreground">Already have an account? </span>
                         <Link
-                            href="/auth/signup"
+                            href="/auth/signin"
                             className="font-medium text-muted-foreground hover:text-primary underline underline-offset-4 transition-colors"
                         >
-                            Sign up
+                            Sign in
                         </Link>
                     </div>
                     <p className="text-xs text-muted-foreground text-center">

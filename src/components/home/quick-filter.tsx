@@ -39,7 +39,7 @@ export function QuickFilter() {
     return (
         <div className="container px-4 -mt-16 relative z-20">
             {/* Promo Banner (Outside) */}
-            <div className="flex justify-center md:justify-start mb-4 relative z-10 animate-in fade-in slide-in-from-bottom-3 duration-700 delay-100">
+            <div className="flex justify-center mb-4 relative z-10 animate-in fade-in slide-in-from-bottom-3 duration-700 delay-100">
                 <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white pl-4 pr-1 py-1 rounded-full shadow-lg flex items-center gap-3 border border-white/10 backdrop-blur-md">
                     <div className="flex items-center gap-2 text-sm font-bold">
                         <TicketPercent className="h-4 w-4 animate-bounce" />

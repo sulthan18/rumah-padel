@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Calendar } from "lucide-react"
+import { Calendar, Users } from "lucide-react"
 
 // Components
 import { QuickFilter } from "@/components/home/quick-filter"

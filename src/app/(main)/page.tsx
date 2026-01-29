@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Calendar, Users } from "lucide-react"
+import { Calendar, Users, Trophy } from "lucide-react"
 
 // Components
 import { QuickFilter } from "@/components/home/quick-filter"
@@ -37,12 +37,23 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="pt-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-            <Button size="lg" className="h-14 px-10 text-lg font-bold rounded-full shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(37,99,235,0.7)] transition-all hover:scale-105" asChild>
-              {/* Scroll to Courts Section */}
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+            <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-full shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(37,99,235,0.7)] transition-all hover:scale-105" asChild>
               <Link href="#courts">
                 <Calendar className="mr-2 h-5 w-5" />
                 Cari Slot Kosong
+              </Link>
+            </Button>
+
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold rounded-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md transition-all hover:scale-105" onClick={() => window.open("https://wa.me/6281234567890", "_blank")}>
+              <Users className="mr-2 h-5 w-5" />
+              Cari Lawan Main
+            </Button>
+
+            <Button size="lg" variant="ghost" className="h-14 px-8 text-lg font-bold rounded-full text-zinc-300 hover:text-white hover:bg-white/5 transition-all hover:scale-105" asChild>
+              <Link href="/tournaments">
+                <Trophy className="mr-2 h-5 w-5" />
+                Lihat Turnamen
               </Link>
             </Button>
           </div>

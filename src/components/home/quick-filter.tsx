@@ -38,7 +38,18 @@ export function QuickFilter() {
 
     return (
         <div className="container px-4 -mt-16 relative z-20">
-            {/* Old Promo Banner Removed */}
+            {/* Promo Banner (Outside) */}
+            <div className="flex justify-center md:justify-start mb-4 relative z-10 animate-in fade-in slide-in-from-bottom-3 duration-700 delay-100">
+                <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white pl-4 pr-1 py-1 rounded-full shadow-lg flex items-center gap-3 border border-white/10 backdrop-blur-md">
+                    <div className="flex items-center gap-2 text-sm font-bold">
+                        <TicketPercent className="h-4 w-4 animate-bounce" />
+                        <span>Diskon 20% Main Pagi!</span>
+                    </div>
+                    <div className="bg-white/20 px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider cursor-pointer hover:bg-white/30 transition-colors">
+                        KODE: MORNINGSMASH
+                    </div>
+                </div>
+            </div>
 
             <Card className="shadow-2xl bg-white/95 backdrop-blur-xl border border-white/20 overflow-visible">
                 {/* Tab Switcher */}

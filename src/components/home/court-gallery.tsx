@@ -43,7 +43,7 @@ export function CourtGallery() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
                     {COURTS.map(court => (
                         <Card key={court.id} className="group overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300">
                             <div className="relative h-64 w-full overflow-hidden bg-zinc-200">

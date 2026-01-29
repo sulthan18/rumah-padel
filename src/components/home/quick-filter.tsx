@@ -52,12 +52,12 @@ export function QuickFilter() {
             </div>
 
             <Card className="max-w-4xl mx-auto shadow-2xl bg-white/95 backdrop-blur-xl border border-white/20 overflow-visible">
-                {/* Tab Switcher - Centered */}
-                <div className="flex justify-center border-b border-zinc-100">
+                {/* Tab Switcher */}
+                <div className="flex border-b border-zinc-100">
                     <button
                         onClick={() => setActiveTab("book")}
                         className={cn(
-                            "px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all hover:bg-zinc-50",
+                            "flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all hover:bg-zinc-50",
                             activeTab === "book" ? "text-primary border-b-2 border-primary bg-blue-50/50" : "text-muted-foreground"
                         )}
                     >
@@ -67,7 +67,7 @@ export function QuickFilter() {
                     <button
                         onClick={() => setActiveTab("match")}
                         className={cn(
-                            "px-8 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all hover:bg-zinc-50",
+                            "flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all hover:bg-zinc-50",
                             activeTab === "match" ? "text-primary border-b-2 border-primary bg-blue-50/50" : "text-muted-foreground"
                         )}
                     >
@@ -134,8 +134,8 @@ export function QuickFilter() {
                                 </Button>
                             </div>
 
-                            {/* Live Ticker - Centered */}
-                            <div className="flex justify-center">
+                            {/* Live Ticker */}
+                            <div className="flex justify-end">
                                 <span className={cn(
                                     "text-xs font-medium px-2 py-1 rounded-full animate-pulse",
                                     slotsLeft > 0 ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"

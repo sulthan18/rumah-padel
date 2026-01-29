@@ -33,7 +33,7 @@ const COURTS = [
 export function CourtGallery() {
     return (
         <section id="courts" className="py-20 bg-zinc-50 dark:bg-zinc-950/50">
-            <div className="container px-4">
+            <div className="container mx-auto px-4">
                 <div className="text-center mb-12 space-y-4">
                     <h2 className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
                         Pilih Lapangan Kami

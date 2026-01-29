@@ -45,9 +45,11 @@ export default function Home() {
               </Link>
             </Button>
 
-            <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold rounded-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md transition-all hover:scale-105" onClick={() => window.open("https://wa.me/6281234567890", "_blank")}>
-              <Users className="mr-2 h-5 w-5" />
-              Cari Lawan Main
+            <Button size="lg" variant="outline" className="h-14 px-8 text-lg font-bold rounded-full bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white backdrop-blur-md transition-all hover:scale-105" asChild>
+              <Link href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">
+                <Users className="mr-2 h-5 w-5" />
+                Cari Lawan Main
+              </Link>
             </Button>
 
             <Button size="lg" variant="ghost" className="h-14 px-8 text-lg font-bold rounded-full text-zinc-300 hover:text-white hover:bg-white/5 transition-all hover:scale-105" asChild>

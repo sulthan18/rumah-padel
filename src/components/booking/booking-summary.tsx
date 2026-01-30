@@ -77,12 +77,10 @@ export function BookingSummary({
                 >
                     {isSubmitting ? (
                         <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Process...
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Memproses...
                         </>
-                    ) : isAuthenticated ? (
-                        "Confirm Booking"
                     ) : (
-                        "Login to Book"
+                        "Lanjut ke Pembayaran"
                     )}
                 </Button>
             </CardFooter>

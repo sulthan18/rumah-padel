@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import { format } from "date-fns"
-import { PRICING } from "@/lib/constants"
+import { PRICING, COURTS_DATA } from "@/lib/constants"
 import { useRouter } from "next/navigation"
 
 export function useBooking() {
@@ -33,61 +33,32 @@ export function useBooking() {
     }
 
     const submitBooking = async () => {
-        if (!session) {
-            toast.error("Please login to book a court")
-            router.push("/auth/signin")
-            return
-        }
-
         if (!selectedCourt || !selectedDate || selectedSlots.length === 0) {
-            toast.error("Please complete your selection")
+            toast.error("Mohon lengkapi semua pilihan (lapangan, tanggal, dan jam)")
             return
         }
 
-        setIsSubmitting(true)
-
-        try {
-            // Assumes contiguous slots for now. 
-            // In a real app, we'd need to validate they are contiguous and take the range.
-            const sortedSlots = selectedSlots.sort()
-            const startTimeStr = sortedSlots[0]
-            const endTimeSlot = sortedSlots[sortedSlots.length - 1]
-
-            // Calculate end time (start time + 1 hour)
-            const [endHour, endMinute] = endTimeSlot.split(":").map(Number)
-            const endTimeStr = `${(endHour + 1).toString().padStart(2, "0")}:${endMinute.toString().padStart(2, "0")}`
-
-            const startTime = new Date(selectedDate)
-            const [startH, startM] = startTimeStr.split(":").map(Number)
-            startTime.setHours(startH, startM, 0, 0)
-
-            const endTime = new Date(selectedDate)
-            const [endH, endM] = endTimeStr.split(":").map(Number)
-            endTime.setHours(endH, endM, 0, 0)
-
-            const res = await fetch("/api/bookings", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    courtId: selectedCourt,
-                    startTime: startTime.toISOString(),
-                    endTime: endTime.toISOString(),
-                }),
-            })
-
-            const data = await res.json()
-
-            if (!res.ok) {
-                throw new Error(data.message || "Booking failed")
-            }
-
-            toast.success("Booking created successfully!")
-            router.push("/dashboard") // Redirect to dashboard
-        } catch (error) {
-            toast.error(error instanceof Error ? error.message : "Something went wrong")
-        } finally {
-            setIsSubmitting(false)
+        // Get court details
+        const courtDetails = COURTS_DATA.find(c => c.id === selectedCourt)
+        if (!courtDetails) {
+            toast.error("Lapangan tidak ditemukan")
+            return
         }
+
+        // Save booking data to sessionStorage
+        const bookingData = {
+            courtId: selectedCourt,
+            courtName: courtDetails.name,
+            date: format(selectedDate, "yyyy-MM-dd"),
+            slots: selectedSlots,
+            pricePerHour: courtDetails.pricePerHour,
+        }
+
+        sessionStorage.setItem("pendingBooking", JSON.stringify(bookingData))
+
+        // Redirect to checkout
+        toast.success("Lanjut ke pembayaran...")
+        router.push("/booking/checkout")
     }
 
     // Calculate total price based on selected court type (assuming price is passed or fetched)

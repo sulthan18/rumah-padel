@@ -9,6 +9,7 @@ import { BookingSummary } from "./booking-summary"
 import { COURTS_DATA } from "@/lib/constants"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function BookingForm() {
     const {
@@ -29,13 +30,18 @@ export function BookingForm() {
     // Get selected court details for summary
     const courtDetails = COURTS_DATA.find(c => c.id === selectedCourt)
 
+    const showSummary = selectedSlots.length > 0
+
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="flex flex-col lg:flex-row items-start justify-center gap-8 min-h-[600px] transition-all duration-500 ease-in-out relative">
             {/* Left Column: Selection Flow */}
-            <div className="lg:col-span-8 space-y-8">
+            <div className={cn(
+                "space-y-8 transition-all duration-700 ease-in-out w-full",
+                showSummary ? "lg:w-[60%]" : "lg:max-w-3xl mx-auto"
+            )}>
 
                 {/* Step 1: Calendar */}
-                <section>
+                <section className="bg-white rounded-xl p-6 shadow-sm border border-zinc-100">
                     <BookingCalendar
                         selectedDate={selectedDate}
                         onSelect={setSelectedDate}
@@ -48,8 +54,8 @@ export function BookingForm() {
                         selectedCourt={selectedCourt}
                         onSelect={(id) => {
                             setSelectedCourt(id)
-                            // Clear slots when changing court
-                            // Note: Logic could be moved to hook but fine here for composition
+                            // Clear slots when changing court is handled by hook usually, 
+                            // but if not effectively, the user re-selects
                         }}
                     />
                 </section>
@@ -76,7 +82,12 @@ export function BookingForm() {
             </div>
 
             {/* Right Column: Summary Sticky */}
-            <div className="lg:col-span-4">
+            <div className={cn(
+                "w-full lg:w-[35%] sticky top-24 transition-all duration-700 ease-in-out",
+                showSummary
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-20 absolute right-0 pointer-events-none hidden lg:block h-0 overflow-hidden"
+            )}>
                 {selectedDate && (
                     <BookingSummary
                         selectedDate={selectedDate}

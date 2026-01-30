@@ -34,7 +34,7 @@ export default function AuthLayout({
                     <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center mr-2 shadow-lg shadow-primary/20">
                         <Swords className="h-4 w-4 text-primary-foreground -rotate-45" />
                     </div>
-                    PadelFlow
+                    Rumah Padel
                 </div>
 
                 <div className="relative z-20 mt-auto">

@@ -34,7 +34,7 @@ export function CourtGallery() {
     return (
         <section id="courts" className="py-20 bg-zinc-50 dark:bg-zinc-950/50">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-12 space-y-4">
+                <div className="text-center mb-12 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <h2 className="text-3xl md:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50">
                         Pilih Lapangan Kami
                     </h2>
@@ -44,8 +44,8 @@ export function CourtGallery() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                    {COURTS.map(court => (
-                        <Card key={court.id} className="group overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300">
+                    {COURTS.map((court, index) => (
+                        <Card key={court.id} className="group overflow-hidden border-none shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${index * 100}ms` }}>
                             <div className="relative h-64 w-full overflow-hidden bg-zinc-200">
                                 <Image
                                     src={court.image}

@@ -30,7 +30,7 @@ export function Testimonials() {
     return (
         <section className="py-24 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16 space-y-4">
+                <div className="text-center mb-16 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900">
                         Kata Mereka
                     </h2>
@@ -38,7 +38,7 @@ export function Testimonials() {
 
                 <div className="flex flex-col md:flex-row gap-6 justify-center">
                     {reviews.map((review, i) => (
-                        <Card key={i} className="md:w-1/3 bg-zinc-50 border-zinc-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+                        <Card key={i} className="md:w-1/3 bg-zinc-50 border-zinc-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 animate-in fade-in slide-in-from-bottom-8" style={{ animationDelay: `${i * 100}ms` }}>
                             <CardContent className="p-8 space-y-6">
                                 <div className="flex gap-1">
                                     {[...Array(review.rating)].map((_, i) => (

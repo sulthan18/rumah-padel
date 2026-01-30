@@ -35,9 +35,9 @@ export function SocialProof() {
     return (
         <section className="py-12 border-b border-zinc-100 bg-white">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     {stats.map((stat, index) => (
-                        <div key={index} className="flex flex-col items-center text-center space-y-2 group cursor-default">
+                        <div key={index} className="flex flex-col items-center text-center space-y-2 group cursor-default" style={{ animationDelay: `${index * 100}ms` }}>
                             <div className={`p-4 rounded-full ${stat.bg} ${stat.color} mb-2 transition-transform group-hover:scale-110 duration-300`}>
                                 <stat.icon className="h-8 w-8" />
                             </div>

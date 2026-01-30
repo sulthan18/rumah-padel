@@ -23,7 +23,7 @@ export function FAQ() {
     return (
         <section className="py-24 bg-zinc-50">
             <div className="container mx-auto px-4 max-w-3xl">
-                <div className="text-center mb-12 space-y-4">
+                <div className="text-center mb-12 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900">
                         Sering Ditanyakan
                     </h2>
@@ -34,7 +34,7 @@ export function FAQ() {
 
                 <Accordion type="single" collapsible className="w-full space-y-4">
                     {faqs.map((faq, i) => (
-                        <AccordionItem key={i} value={`item-${i}`} className="bg-white border border-zinc-200 rounded-xl px-4 shadow-sm hover:shadow-md transition-all">
+                        <AccordionItem key={i} value={`item-${i}`} className="bg-white border border-zinc-200 rounded-xl px-4 shadow-sm hover:shadow-md transition-all animate-in fade-in slide-in-from-bottom-6" style={{ animationDelay: `${i * 80}ms` }}>
                             <AccordionTrigger className="text-base md:text-lg font-bold text-zinc-900 py-6 hover:no-underline">
                                 {faq.question}
                             </AccordionTrigger>

@@ -43,7 +43,7 @@ export function Facilities() {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="mb-12 text-center">
+                <div className="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900 mb-4">
                         Premium Amenities
                     </h2>
@@ -54,7 +54,7 @@ export function Facilities() {
 
                 <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-[1200px] md:h-[600px]">
                     {features.map((feature, i) => (
-                        <div key={i} className={`relative group overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 ${feature.className}`}>
+                        <div key={i} className={`relative group overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 ${feature.className} animate-in fade-in zoom-in duration-700`} style={{ animationDelay: `${i * 100}ms` }}>
                             {/* Background Image */}
                             <Image
                                 src={feature.image}

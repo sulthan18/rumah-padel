@@ -38,7 +38,7 @@ export function Pricing() {
     return (
         <section className="py-24 bg-zinc-50 border-y border-zinc-200">
             <div className="container mx-auto px-4">
-                <div className="text-center mb-16 space-y-4">
+                <div className="text-center mb-16 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900">
                         Pricing & Membership
                     </h2>
@@ -49,7 +49,7 @@ export function Pricing() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     {plans.map((plan, index) => (
-                        <Card key={index} className={`relative flex flex-col border-2 ${plan.popular ? "border-primary shadow-2xl scale-105 z-10" : "border-zinc-200 hover:border-zinc-300 shadow-md"}`}>
+                        <Card key={index} className={`relative flex flex-col border-2 ${plan.popular ? "border-primary shadow-2xl scale-105 z-10" : "border-zinc-200 hover:border-zinc-300 shadow-md"} animate-in fade-in slide-in-from-bottom-8 duration-700`} style={{ animationDelay: `${index * 150}ms` }}>
                             {plan.popular && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-1 rounded-full text-sm font-bold flex items-center gap-2 shadow-lg">
                                     <Crown className="h-4 w-4 fill-current" /> Most Popular

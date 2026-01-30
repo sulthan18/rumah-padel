@@ -16,7 +16,7 @@ export function InstagramFeed() {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-4 text-center md:text-left">
+                <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-4 text-center md:text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
                     <div>
                         <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900 mb-2">
                             #PadelVibes
@@ -35,7 +35,7 @@ export function InstagramFeed() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
                     {posts.map((src, i) => (
-                        <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-zinc-100 group cursor-pointer">
+                        <div key={i} className="relative aspect-square overflow-hidden rounded-xl bg-zinc-100 group cursor-pointer animate-in fade-in zoom-in duration-500" style={{ animationDelay: `${i * 60}ms` }}>
                             <Image
                                 src={src}
                                 alt={`Instagram post ${i}`}

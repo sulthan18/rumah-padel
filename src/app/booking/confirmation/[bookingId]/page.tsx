@@ -20,6 +20,13 @@ interface BookingDetails {
     customerEmail: string
     total: number
     status: string
+    payment?: {
+        id: string
+        amount: number
+        status: string
+        provider: string
+        paidAt: string | null
+    }
 }
 
 export default function ConfirmationPage() {
@@ -34,7 +41,8 @@ export default function ConfirmationPage() {
             try {
                 const response = await fetch(`/api/booking/${bookingId}`)
                 if (response.ok) {
-                    const data = await response.json()
+                    const result = await response.json()
+                    const data = result.data
                     setBooking(data)
 
                     // Generate QR code
@@ -47,6 +55,8 @@ export default function ConfirmationPage() {
                         },
                     })
                     setQrCodeUrl(qr)
+                } else {
+                    console.error("Failed to fetch booking")
                 }
             } catch (error) {
                 console.error("Failed to fetch booking:", error)
@@ -57,8 +67,19 @@ export default function ConfirmationPage() {
 
         if (bookingId) {
             fetchBooking()
+
+            // Poll for payment status if pending
+            const interval = setInterval(async () => {
+                if (booking?.payment?.status === "PENDING") {
+                    fetchBooking()
+                } else {
+                    clearInterval(interval)
+                }
+            }, 5000) // Check every 5 seconds
+
+            return () => clearInterval(interval)
         }
-    }, [bookingId])
+    }, [bookingId, booking?.payment?.status])
 
     const handleDownloadQR = () => {
         const link = document.createElement("a")

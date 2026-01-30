@@ -42,10 +42,10 @@ export default function Home() {
           {/* SEO-Optimized Heading */}
           <div className="space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-700">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter">
-              Booking Lapangan Padel Jakarta
+              Booking Padel Jakarta
             </h1>
-            <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto">
-              Lapangan standar WPT dengan fasilitas premium. Booking online mudah & cepat.
+            <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto font-bold">
+              Standar WPT • Booking Instan
             </p>
           </div>
 

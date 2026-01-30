@@ -39,6 +39,15 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 w-full max-w-5xl px-4 text-center space-y-8">
+          {/* SEO-Optimized Heading */}
+          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-700">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter">
+              Booking Lapangan Padel Jakarta
+            </h1>
+            <p className="text-lg md:text-xl text-zinc-300 max-w-2xl mx-auto">
+              Lapangan standar WPT dengan fasilitas premium. Booking online mudah & cepat.
+            </p>
+          </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
             <Button size="lg" className="h-14 px-8 text-lg font-bold rounded-full shadow-[0_0_20px_rgba(37,99,235,0.5)] hover:shadow-[0_0_30px_rgba(37,99,235,0.7)] transition-all hover:scale-105" asChild>

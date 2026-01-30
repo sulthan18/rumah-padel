@@ -36,7 +36,7 @@ export function BookingSummary({
 
     return (
         <Card className="sticky top-20 border-primary/20 shadow-lg">
-            <CardHeader className="bg-primary/5 pb-4">
+            <CardHeader className="pb-4">
                 <CardTitle className="text-lg text-primary">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">

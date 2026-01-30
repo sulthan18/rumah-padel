@@ -33,11 +33,11 @@ export function BookingForm() {
     const showSummary = selectedSlots.length > 0
 
     return (
-        <div className="flex flex-col lg:flex-row items-start justify-center gap-8 min-h-[600px] relative transition-all duration-500">
+        <div className="flex flex-col lg:flex-row items-start justify-center gap-8 min-h-[600px] transition-all duration-500 ease-in-out relative">
             {/* Left Column: Selection Flow */}
             <div className={cn(
-                "space-y-8 transition-all duration-500 ease-in-out w-full",
-                showSummary ? "lg:w-[60%]" : "max-w-3xl mx-auto"
+                "space-y-8 transition-all duration-700 ease-in-out w-full",
+                showSummary ? "lg:w-[60%]" : "lg:max-w-3xl mx-auto"
             )}>
 
                 {/* Step 1: Calendar */}
@@ -54,6 +54,8 @@ export function BookingForm() {
                         selectedCourt={selectedCourt}
                         onSelect={(id) => {
                             setSelectedCourt(id)
+                            // Clear slots when changing court is handled by hook usually, 
+                            // but if not effectively, the user re-selects
                         }}
                     />
                 </section>
@@ -81,10 +83,10 @@ export function BookingForm() {
 
             {/* Right Column: Summary Sticky */}
             <div className={cn(
-                "w-full lg:w-[35%] sticky top-24 transition-all duration-500 ease-in-out",
+                "w-full lg:w-[35%] transition-all duration-700 ease-in-out",
                 showSummary
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 translate-x-10 hidden lg:block h-0 lg:w-0"
+                    : "opacity-0 translate-x-20 absolute right-0 pointer-events-none hidden lg:block h-0 overflow-hidden"
             )}>
                 {selectedDate && (
                     <BookingSummary

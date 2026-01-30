@@ -36,10 +36,10 @@ export function BookingSummary({
 
     return (
         <Card className="sticky top-20 border-primary/20 shadow-lg">
-            <CardHeader className="pb-4">
+            <CardHeader className="pb-2">
                 <CardTitle className="text-lg text-primary pt-4">Booking Summary</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 pt-6">
+            <CardContent className="space-y-4 pt-0">
                 <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Date</span>
                     <span className="font-medium">{selectedDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>

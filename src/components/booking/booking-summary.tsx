@@ -35,9 +35,9 @@ export function BookingSummary({
     }
 
     return (
-        <Card className="sticky top-32 mt-12 border-primary/20 shadow-lg transition-all duration-300">
-            <CardHeader className="bg-primary/5 pb-4 pt-6">
-                <CardTitle className="text-lg text-primary">Booking Summary</CardTitle>
+        <Card className="sticky top-20 border-primary/20 shadow-lg">
+            <CardHeader className="pb-4">
+                <CardTitle className="text-lg text-primary pt-4">Booking Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 pt-6">
                 <div className="flex justify-between text-sm">

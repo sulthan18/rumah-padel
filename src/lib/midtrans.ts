@@ -1,10 +1,20 @@
 import Midtrans from "midtrans-client"
 
 // Initialize Midtrans Snap client
+const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true"
+const serverKey = process.env.MIDTRANS_SERVER_KEY || ""
+const clientKey = process.env.MIDTRANS_CLIENT_KEY || ""
+
+console.log("Midtrans Init:", {
+    isProduction,
+    serverKey: serverKey.substring(0, 5) + "...",
+    clientKey: clientKey.substring(0, 5) + "...",
+})
+
 const snap = new Midtrans.Snap({
-    isProduction: process.env.MIDTRANS_IS_PRODUCTION === "true",
-    serverKey: process.env.MIDTRANS_SERVER_KEY || "",
-    clientKey: process.env.MIDTRANS_CLIENT_KEY || "",
+    isProduction,
+    serverKey,
+    clientKey,
 })
 
 export interface MidtransCustomerDetails {
@@ -62,9 +72,11 @@ export async function createTransaction(params: CreateTransactionParams) {
             token: transaction.token,
             redirectUrl: transaction.redirect_url,
         }
-    } catch (error) {
+    } catch (error: any) {
         console.error("Midtrans create transaction error:", error)
-        throw new Error("Failed to create payment transaction")
+        // Throw the specific error message from Midtrans if available
+        const errorMessage = error?.message || error?.ApiResponse?.status_message || "Failed to create payment transaction"
+        throw new Error(errorMessage)
     }
 }
 

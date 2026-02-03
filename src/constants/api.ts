@@ -4,12 +4,11 @@
  */
 export const API_ROUTES = {
     bookings: {
-        create: "/api/bookings",
+        create: "/api/booking",
         available: "/api/bookings/available",
         user: "/api/bookings/user",
     },
     payments: {
-        simulate: "/api/payments/simulate",
-        webhook: "/api/payments/webhook",
+        webhook: "/api/payment/webhook",
     },
 } as const

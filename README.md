@@ -80,19 +80,63 @@ rumah-padel/
 └── public/                    # Static assets
 ```
 
-## 🗄️ Database Schema
+---
 
-- **User**: Authentication and profile
-- **Court**: Court information and pricing
-- **Booking**: Reservation records with status
-- **Payment**: Payment tracking
-- **Account/Session**: NextAuth tables
+# 📚 Documentation & Setup Guides
 
-## 🎨 Design Optimizations
+## 💳 Midtrans Payment Setup
 
-- **Int vs Decimal**: Using `Int` for prices to avoid Next.js serialization issues
-- **Indexes**: Composite indexes on `(courtId, startTime, endTime)` for schedule queries
-- **Connection Pooling**: Separate URLs for transactions and migrations
+Rumah Padel uses **Midtrans** as the payment gateway.
+
+### Configuration
+Credentials in `.env`:
+```bash
+MIDTRANS_SERVER_KEY="SB-Mid-server-xxx"
+MIDTRANS_CLIENT_KEY="SB-Mid-client-xxx"
+MIDTRANS_IS_PRODUCTION="false"
+```
+
+### Payment Flow
+1. **User** fills checkout form -> Creates PENDING booking
+2. **Backend** calls Midtrans -> Returns Snap Token
+3. **Frontend** shows Snap Popup -> User pays
+4. **Midtrans** sends Webhook -> Backend updates status to CONFIRMED
+
+### Webhook Setup
+- **Development**: Use ngrok to expose localhost
+- **Production**: Set URL to `https://yourdomain.com/api/payment/webhook`
+
+### Testing (Sandbox)
+- **QRIS**: Click simulator buttons
+- **Credit Card**: Use `4811 1111 1111 1114` (CVV: 123, OTP: 112233)
+- **VA**: Use [Midtrans Simulator](https://simulator.sandbox.midtrans.com/)
+
+---
+
+## 🔐 Google OAuth Setup
+
+Setup Google Login for NextAuth.
+
+### Steps
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create New Project -> "Rumah Padel"
+3. Enable **Google+ API**
+4. Configure **OAuth Consent Screen** (External)
+5. Create **OAuth Client ID** (Web Application)
+   - **Origins**: `http://localhost:3000`
+   - **Redirect URIs**: `http://localhost:3000/api/auth/callback/google`
+6. Copy Client ID & Secret to `.env`
+
+```env
+GOOGLE_CLIENT_ID="your_client_id"
+GOOGLE_CLIENT_SECRET="your_client_secret"
+```
+
+### Troubleshooting
+- **redirect_uri_mismatch**: Ensure URI matches exactly `http://localhost:3000/api/auth/callback/google`
+- **Access blocked**: Add your email to Test Users in OAuth Consent Screen
+
+---
 
 ## 📝 Scripts
 
@@ -101,10 +145,6 @@ rumah-padel/
 - `npm run start` - Start production server
 - `npm run seed` - Seed database with courts
 - `npx prisma studio` - Open Prisma Studio
-
-## 🔐 Environment Variables
-
-See `.env.example` for required variables.
 
 ## 📄 License
 

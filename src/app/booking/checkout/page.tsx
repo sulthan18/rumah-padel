@@ -12,6 +12,8 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ChevronLeft, Loader2, Calendar, Clock, MapPin, CreditCard } from "lucide-react"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
+import { BookingStepper } from "@/components/booking/booking-stepper"
 
 interface BookingData {
     courtId: string
@@ -29,6 +31,7 @@ declare global {
 
 export default function CheckoutPage() {
     const router = useRouter()
+    const { data: session } = useSession()
     const [bookingData, setBookingData] = useState<BookingData | null>(null)
     const [agreedToTerms, setAgreedToTerms] = useState(false)
     const [isProcessing, setIsProcessing] = useState(false)
@@ -38,6 +41,14 @@ export default function CheckoutPage() {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
+
+    useEffect(() => {
+        // Pre-fill user data if available
+        if (session?.user) {
+            setName(session.user.name || "")
+            setEmail(session.user.email || "")
+        }
+    }, [session])
 
     useEffect(() => {
         // Get booking data from sessionStorage
@@ -62,13 +73,25 @@ export default function CheckoutPage() {
     const total = subtotal + adminFee
 
     const handleSubmit = async () => {
-        if (!name || !email || !phone || !agreedToTerms) {
-            alert("Mohon lengkapi semua data dan setujui syarat & ketentuan")
+        if (!name) {
+            alert("Mohon isi Nama Lengkap")
+            return
+        }
+        if (!email) {
+            alert("Mohon isi Email")
+            return
+        }
+        if (!phone) {
+            alert("Mohon isi No. WhatsApp")
+            return
+        }
+        if (!agreedToTerms) {
+            alert("Mohon setujui Syarat & Ketentuan")
             return
         }
 
         if (!snapLoaded) {
-            alert("Payment system is loading, please wait...")
+            alert("Sistem pembayaran sedang memuat, mohon tunggu sebentar...")
             return
         }
 
@@ -157,22 +180,7 @@ export default function CheckoutPage() {
                             </div>
 
                             {/* Progress Indicator */}
-                            <div className="hidden md:flex items-center gap-2 text-sm">
-                                <div className="flex items-center gap-2 text-muted-foreground">
-                                    <div className="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">✓</div>
-                                    <span>Pilih Jadwal</span>
-                                </div>
-                                <div className="w-8 h-0.5 bg-zinc-200" />
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</div>
-                                    <span className="font-medium">Pembayaran</span>
-                                </div>
-                                <div className="w-8 h-0.5 bg-zinc-200" />
-                                <div className="flex items-center gap-2 text-muted-foreground">
-                                    <div className="bg-zinc-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</div>
-                                    <span>Selesai</span>
-                                </div>
-                            </div>
+                            <BookingStepper currentStep={2} />
                         </div>
                     </div>
                 </div>
@@ -227,11 +235,25 @@ export default function CheckoutPage() {
                                 </CardHeader>
                                 <CardContent>
                                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                        <p className="text-sm text-blue-900 font-medium mb-1">💳 Midtrans Payment Gateway</p>
-                                        <p className="text-xs text-blue-700">
-                                            Setelah klik "Bayar", kamu akan diarahkan ke halaman pembayaran Midtrans.
-                                            Pilih metode: QRIS, Virtual Account, Kartu Kredit, dll.
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="p-2 bg-white rounded-md shadow-sm">
+                                                <CreditCard className="h-6 w-6 text-blue-600" />
+                                            </div>
+                                            <div>
+                                                <p className="font-semibold text-blue-900">Midtrans Payment Gateway</p>
+                                                <p className="text-xs text-blue-700">Aman & Terpercaya</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-sm text-blue-800 mb-3">
+                                            Support berbagai metode pembayaran:
                                         </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {["QRIS", "GoPay", "ShopeePay", "BCA", "Mandiri", "BNI", "BRI", "Kartu Kredit"].map((method) => (
+                                                <Badge key={method} variant="secondary" className="bg-white/60 hover:bg-white text-blue-800 border-blue-100">
+                                                    {method}
+                                                </Badge>
+                                            ))}
+                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>

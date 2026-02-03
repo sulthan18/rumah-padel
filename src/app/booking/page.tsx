@@ -2,6 +2,7 @@ import { BookingForm } from "@/components/booking/booking-form"
 import { ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { BookingStepper } from "@/components/booking/booking-stepper"
 
 export const metadata = {
     title: "Booking Lapangan Padel - Rumah Padel",
@@ -29,22 +30,8 @@ export default function BookingPage() {
                         </div>
 
                         {/* Progress Indicator */}
-                        <div className="hidden md:flex items-center gap-2 text-sm">
-                            <div className="flex items-center gap-2">
-                                <div className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">1</div>
-                                <span className="font-medium">Pilih Jadwal</span>
-                            </div>
-                            <div className="w-8 h-0.5 bg-zinc-200" />
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <div className="bg-zinc-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">2</div>
-                                <span>Pembayaran</span>
-                            </div>
-                            <div className="w-8 h-0.5 bg-zinc-200" />
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                                <div className="bg-zinc-200 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">3</div>
-                                <span>Selesai</span>
-                            </div>
-                        </div>
+                        {/* Progress Indicator */}
+                        <BookingStepper currentStep={1} />
                     </div>
                 </div>
             </div>

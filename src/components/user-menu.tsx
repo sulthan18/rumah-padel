@@ -42,7 +42,7 @@ export function UserMenu() {
         .toUpperCase()
         .slice(0, 2) || "U"
 
-    const isAdmin = session.user?.email === "admin@padelflow.com" // Simple role check for now
+    const isAdmin = session.user?.email === "admin@rumahpadel.com" // Simple role check for now
 
     // 🅱️ Player & Admin View
     return (

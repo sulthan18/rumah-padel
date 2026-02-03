@@ -67,14 +67,12 @@ export default function ConfirmationPage() {
                 // Trigger Email Sending (Idempotency check via localStorage)
                 const emailSentKey = `email_sent_${bookingId}`
                 if (!localStorage.getItem(emailSentKey)) {
-                    console.log("Triggering email confirmation...")
                     fetch("/api/email/send", {
                         method: "POST",
                         body: JSON.stringify({ bookingId }),
                         headers: { "Content-Type": "application/json" }
                     }).then(res => {
                         if (res.ok) {
-                            console.log("Email confirmation sent!")
                             localStorage.setItem(emailSentKey, "true")
                         }
                     })

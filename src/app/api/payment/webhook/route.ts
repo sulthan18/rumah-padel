@@ -20,12 +20,6 @@ export async function POST(request: NextRequest) {
             signature_key,
         } = body
 
-        console.log("[Webhook] Received notification:", {
-            order_id,
-            transaction_status,
-            fraud_status,
-        })
-
         // Verify signature
         const isValid = midtrans.verifySignature(
             order_id,
@@ -91,12 +85,6 @@ export async function POST(request: NextRequest) {
                 data: { status: bookingStatus },
             })
         }
-
-        console.log("[Webhook] Updated booking:", {
-            bookingId: order_id,
-            bookingStatus,
-            paymentStatus,
-        })
 
         // TODO: Send confirmation email if booking confirmed
         // if (bookingStatus === "CONFIRMED") {

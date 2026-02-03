@@ -120,13 +120,11 @@ export default function CheckoutPage() {
 
             // Open Midtrans Snap popup
             window.snap.pay(snapToken, {
-                onSuccess: function (result: any) {
-                    console.log("Payment success:", result)
+                onSuccess: (result: any) => {
                     sessionStorage.removeItem("pendingBooking")
                     router.push(`/booking/confirmation/${bookingId}`)
                 },
-                onPending: function (result: any) {
-                    console.log("Payment pending:", result)
+                onPending: (result: any) => {
                     sessionStorage.removeItem("pendingBooking")
                     router.push(`/booking/confirmation/${bookingId}`)
                 },
@@ -135,8 +133,7 @@ export default function CheckoutPage() {
                     alert("Pembayaran gagal. Silakan coba lagi.")
                     setIsProcessing(false)
                 },
-                onClose: function () {
-                    console.log("Payment popup closed")
+                onClose: () => {
                     setIsProcessing(false)
                 },
             })

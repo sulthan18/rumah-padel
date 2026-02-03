@@ -5,11 +5,7 @@ const isProduction = process.env.MIDTRANS_IS_PRODUCTION === "true"
 const serverKey = process.env.MIDTRANS_SERVER_KEY || ""
 const clientKey = process.env.MIDTRANS_CLIENT_KEY || ""
 
-console.log("Midtrans Init:", {
-    isProduction,
-    serverKey: serverKey.substring(0, 5) + "...",
-    clientKey: clientKey.substring(0, 5) + "...",
-})
+// Midtrans initialized in ${isProduction ? 'production' : 'sandbox'} mode
 
 const snap = new Midtrans.Snap({
     isProduction,

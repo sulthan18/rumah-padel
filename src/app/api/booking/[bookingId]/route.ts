@@ -15,7 +15,7 @@ export async function GET(
     try {
         const params = await props.params
         const { bookingId } = params
-        console.log(`[API] Fetching booking details for ID: ${bookingId}`)
+        // Fetching booking details
 
         const booking = await prisma.booking.findUnique({
             where: { id: bookingId },
@@ -41,7 +41,7 @@ export async function GET(
         })
 
         if (!booking) {
-            console.log(`[API] Booking not found for ID: ${bookingId}`)
+            // Booking not found
             return NextResponse.json(
                 {
                     success: false,

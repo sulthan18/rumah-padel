@@ -6,12 +6,16 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(
     request: NextRequest,
-    { params }: { params: { bookingId: string } }
+    props: { params: Promise<{ bookingId: string }> }
 ) {
     try {
+        const params = await props.params
         const { bookingId } = params
+        console.log(`[API] Fetching booking details for ID: ${bookingId}`)
 
         const booking = await prisma.booking.findUnique({
             where: { id: bookingId },
@@ -27,8 +31,8 @@ export async function GET(
                 payment: {
                     select: {
                         id: true,
+                        status: true, // Only select what we need to avoid large objects if any
                         amount: true,
-                        status: true,
                         provider: true,
                         paidAt: true,
                     },
@@ -37,6 +41,7 @@ export async function GET(
         })
 
         if (!booking) {
+            console.log(`[API] Booking not found for ID: ${bookingId}`)
             return NextResponse.json(
                 {
                     success: false,

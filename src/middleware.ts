@@ -15,7 +15,18 @@ export default withAuth(
     },
     {
         callbacks: {
-            authorized: ({ token }) => true, // We handle redirects in the middleware function above
+            authorized: ({ token, req }) => {
+                const isAuthPage = req.nextUrl.pathname.startsWith("/auth")
+                const isPublicBookingApi = req.nextUrl.pathname.startsWith("/api/bookings/available")
+
+                // Allow access to auth pages so middleware function can handle them
+                if (isAuthPage || isPublicBookingApi) {
+                    return true
+                }
+
+                // Protect other matched routes (dashboard, api)
+                return !!token
+            },
         },
     }
 )
@@ -23,7 +34,7 @@ export default withAuth(
 export const config = {
     matcher: [
         "/dashboard/:path*",
-        "/auth/:path*", // Intercept auth pages
+        "/auth/:path*",
         "/api/bookings/:path*",
     ],
 }

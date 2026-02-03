@@ -1,6 +1,7 @@
 /**
  * POST /api/booking
  * Create a new booking with Midtrans payment integration
+ * TODO: Implement Rate Limiting (e.g. Upstash/Redis) to prevent abuse of this public endpoint.
  */
 
 import { NextRequest, NextResponse } from "next/server"
@@ -41,6 +42,31 @@ export async function POST(request: NextRequest) {
         }
 
         const { courtId, date, slots, pricePerHour, customerName, customerEmail, customerPhone } = validation.data
+
+        // Rate Limiting: Check for pending bookings for the same customer in the last hour
+        // This is a basic protection against spam/DoS attacks
+        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
+        const recentPendingBookings = await prisma.booking.count({
+            where: {
+                OR: [
+                    { customerEmail: customerEmail },
+                    { customerPhone: customerPhone },
+                ],
+                status: "PENDING",
+                createdAt: { gt: oneHourAgo },
+            },
+        })
+
+        if (recentPendingBookings >= 20) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: "Too Many Requests",
+                    message: "You have too many pending bookings. Please complete your existing bookings or try again later.",
+                },
+                { status: 429 }
+            )
+        }
 
         // Verify court exists and is active
         const court = await prisma.court.findUnique({
@@ -87,6 +113,38 @@ export async function POST(request: NextRequest) {
         const totalPrice = pricePerHour * slots.length
         const adminFee = 5000
         const finalAmount = totalPrice + adminFee
+
+        // Auto-cleanup: Delete PENDING bookings older than 60 minutes to prevent stuck slots
+        const cleanupThreshold = new Date(Date.now() - 60 * 60 * 1000)
+
+        // First, find old PENDING bookings
+        const oldPendingBookings = await prisma.booking.findMany({
+            where: {
+                status: "PENDING",
+                createdAt: {
+                    lt: cleanupThreshold,
+                },
+            },
+            select: { id: true },
+        })
+
+        const oldBookingIds = oldPendingBookings.map((b) => b.id)
+
+        if (oldBookingIds.length > 0) {
+            // Delete associated payments first (foreign key constraint)
+            await prisma.payment.deleteMany({
+                where: {
+                    bookingId: { in: oldBookingIds },
+                },
+            })
+
+            // Then delete the bookings
+            await prisma.booking.deleteMany({
+                where: {
+                    id: { in: oldBookingIds },
+                },
+            })
+        }
 
         // Check for overlapping bookings
         const overlappingBooking = await prisma.booking.findFirst({
@@ -142,29 +200,38 @@ export async function POST(request: NextRequest) {
         })
 
         // Create Midtrans transaction
-        const midtransTransaction = await midtrans.createTransaction({
-            orderId: booking.id,
-            amount: finalAmount,
-            customerDetails: {
-                first_name: customerName,
-                email: customerEmail,
-                phone: customerPhone,
-            },
-            itemDetails: [
-                {
-                    id: courtId,
-                    name: `${court.name} - ${slots.length} jam`,
-                    price: totalPrice,
-                    quantity: 1,
+        let midtransTransaction
+        try {
+            midtransTransaction = await midtrans.createTransaction({
+                orderId: booking.id,
+                amount: finalAmount,
+                customerDetails: {
+                    first_name: customerName,
+                    email: customerEmail,
+                    phone: customerPhone,
                 },
-                {
-                    id: "admin-fee",
-                    name: "Biaya Admin",
-                    price: adminFee,
-                    quantity: 1,
-                },
-            ],
-        })
+                itemDetails: [
+                    {
+                        id: courtId,
+                        name: `${court.name} - ${slots.length} jam`,
+                        price: totalPrice,
+                        quantity: 1,
+                    },
+                    {
+                        id: "admin-fee",
+                        name: "Biaya Admin",
+                        price: adminFee,
+                        quantity: 1,
+                    },
+                ],
+            })
+        } catch (error) {
+            // Rollback: Delete the booking if Midtrans fails
+            await prisma.booking.delete({
+                where: { id: booking.id },
+            })
+            throw error // Re-throw to be handled by the outer catch block
+        }
 
         // Create payment record
         await prisma.payment.create({

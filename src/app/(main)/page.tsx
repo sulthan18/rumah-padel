@@ -14,7 +14,7 @@ import { Pricing } from "@/components/home/pricing"
 import { Testimonials } from "@/components/home/testimonials"
 import { FAQ } from "@/components/home/faq"
 import { InstagramFeed } from "@/components/home/instagram-feed"
-import { Footer } from "@/components/footer"
+// Footer imported in layout
 import { Location } from "@/components/home/location"
 
 export default function Home() {
@@ -103,7 +103,6 @@ export default function Home() {
 
       {/* 12. Location & Footer */}
       <Location />
-      <Footer />
     </div>
   )
 }

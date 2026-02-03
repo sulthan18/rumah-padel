@@ -83,7 +83,7 @@ export function BookingForm() {
 
             {/* Right Column: Summary Sticky */}
             <div className={cn(
-                "w-full lg:w-[35%] transition-all duration-700 ease-in-out",
+                "w-full lg:w-[35%] transition-all duration-700 ease-in-out sticky top-24", // Add sticky here
                 showSummary
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 translate-x-20 absolute right-0 pointer-events-none hidden lg:block h-0 overflow-hidden"

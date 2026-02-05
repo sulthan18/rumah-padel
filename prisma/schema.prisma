@@ -92,14 +92,27 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+enum CourtType {
+  INDOOR
+  OUTDOOR
+}
+
+enum CourtSurface {
+  GRASS
+  CARPET
+}
+
 model Court {
-  id           String    @id @default(cuid())
+  id           String       @id @default(cuid())
   name         String
   description  String?
-  pricePerHour Int       // Rupiah (e.g., 150000 = Rp150,000)
-  isActive     Boolean   @default(true)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  pricePerHour Int          // Rupiah
+  type         CourtType    @default(INDOOR)
+  surface      CourtSurface @default(CARPET)
+  isActive     Boolean      @default(true)
+  imageUrl     String?      // For the card display
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   bookings     Booking[]
 }

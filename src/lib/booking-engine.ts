@@ -120,4 +120,57 @@ export class BookingEngine {
         })
         return conflict
     }
+
+    /**
+     * Get live availability for a court on a specific date
+     */
+    static async getAvailability(courtId: string, date: Date) {
+        const startOfDay = new Date(date)
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(date)
+        endOfDay.setHours(23, 59, 59, 999)
+
+        const bookings = await prisma.booking.findMany({
+            where: {
+                courtId,
+                status: { in: ["PENDING", "CONFIRMED"] },
+                startTime: { gte: startOfDay },
+                endTime: { lte: endOfDay }
+            },
+            select: { startTime: true, endTime: true }
+        })
+
+        // Standard operating hours: 06:00 to 23:00
+        const totalSlots = []
+        for (let i = 6; i < 23; i++) {
+            totalSlots.push(i)
+        }
+
+        const bookedHours = new Set<number>()
+        bookings.forEach(b => {
+            const start = b.startTime.getHours()
+            const end = b.endTime.getHours()
+            for (let h = start; h < end; h++) {
+                bookedHours.add(h)
+            }
+        })
+
+        const availability = totalSlots.map(hour => ({
+            hour: `${hour.toString().padStart(2, '0')}:00`,
+            isAvailable: !bookedHours.has(hour)
+        }))
+
+        // Summary status
+        const availableCount = availability.filter(a => a.isAvailable).length
+        let status = "Available"
+        if (availableCount === 0) status = "Fully Booked"
+        else if (availableCount < 5) status = "Limited Slots"
+
+        return {
+            date: startOfDay,
+            status,
+            slots: availability
+        }
+    }
 }

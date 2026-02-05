@@ -46,6 +46,15 @@ async function main() {
         console.error("FAILED: Pro should be allowed")
     }
 
+    // 5. Test Live Availability
+    console.log("\nTest 4: Live Availability")
+    const availability = await BookingEngine.getAvailability(court.id, new Date())
+    console.log(`Status: ${availability.status}`)
+    console.log(`Slots: ${availability.slots.length} total, ${availability.slots.filter(s => s.isAvailable).length} available`)
+
+    if (availability.slots.length > 0) console.log("PASSED: Availability fetched")
+    else console.error("FAILED: No slots returned")
+
     console.log("\nTests Completed.")
 }
 

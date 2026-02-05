@@ -1,5 +1,7 @@
 "use client"
 
+import React from "react"
+
 import { Check, X, Minus, HelpCircle, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -124,9 +126,9 @@ export default function PricingPage() {
                             </TableHeader>
                             <TableBody>
                                 {features.map((section, sIndex) => (
-                                    <>
+                                    <React.Fragment key={`section-${sIndex}`}>
                                         {/* Category Header */}
-                                        <TableRow key={`cat-${sIndex}`} className="bg-zinc-50/50 hover:bg-zinc-50/50">
+                                        <TableRow className="bg-zinc-50/50 hover:bg-zinc-50/50">
                                             <TableCell colSpan={3} className="pl-8 py-3 font-semibold text-xs uppercase tracking-wider text-zinc-500">
                                                 {section.category}
                                             </TableCell>
@@ -157,7 +159,7 @@ export default function PricingPage() {
                                                 </TableCell>
                                             </TableRow>
                                         ))}
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </TableBody>
                         </Table>

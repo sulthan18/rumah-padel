@@ -13,6 +13,11 @@ enum Role {
   ADMIN
 }
 
+enum MembershipTier {
+  GUEST
+  PRO
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -20,19 +25,36 @@ enum BookingStatus {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                  String          @id @default(cuid())
+  name                String?
+  email               String          @unique
+  emailVerified       DateTime?
+  image               String?
+  role                Role            @default(USER)
+  membershipTier      MembershipTier  @default(GUEST)
+  membershipExpiresAt DateTime?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
   
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[]
 }
+
+// ... (Account, Session, VerificationToken, Court models remain unchanged)
+// We need to match the original file content for unchanged parts if we are replacing a block, 
+// but here I will use the tool efficiently to just target specific areas if possible, 
+// or replace the whole file if it's cleaner. Given the tool `replace_file_content` works on exact match,
+// it is safer to replace large chunks or specific blocks. 
+
+// I will replace the User model and add the new Enum.
+// Then I will handle Booking and PromoCode. 
+
+// Actually, I'll do it in one go for the whole schema if the file is small, 
+// but "replace_file_content" is better with specific targets.
+
+// Let's replace from `enum Role` down to `model Account` start to inject MembershipTier and User updates.
+
 
 // NextAuth models
 model Account {
@@ -88,7 +110,9 @@ model Booking {
   courtId       String
   startTime     DateTime
   endTime       DateTime
-  totalPrice    Int           // Rupiah
+  totalPrice    Int           // Rupiah (Final price after discount)
+  originalPrice Int           @default(0)
+  discountApplied Int         @default(0)
   status        BookingStatus @default(PENDING)
   
   // Customer details (for guest bookings or override)
@@ -96,17 +120,36 @@ model Booking {
   customerEmail String?
   customerPhone String?
   
+  // Promo Code
+  promoCodeId   String?
+
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  user    User?    @relation(fields: [userId], references: [id])
-  court   Court    @relation(fields: [courtId], references: [id])
-  payment Payment?
+  user      User?      @relation(fields: [userId], references: [id])
+  court     Court      @relation(fields: [courtId], references: [id])
+  promoCode PromoCode? @relation(fields: [promoCodeId], references: [id])
+  payment   Payment?
 
   // Indexes for performance (schedule matrix queries)
   @@index([courtId, startTime, endTime])
   @@index([userId])
   @@index([status])
+}
+
+model PromoCode {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  discount  Int      // Value of discount
+  type      String   // "PERCENTAGE" or "FIXED"
+  value     Int      // Redundant? No, discount can be the displayed text/value. Let's simplify: 
+                   // If type is PERCENTAGE, value is 0-100. If FIXED, value is Rupiah.
+  isActive  Boolean  @default(true)
+  expiresAt DateTime?
+  maxUses   Int?
+  usedCount Int      @default(0)
+  
+  bookings  Booking[]
 }
 
 model Payment {

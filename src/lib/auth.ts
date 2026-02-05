@@ -17,13 +17,21 @@ export const authOptions: NextAuthOptions = {
         // }),
     ],
     callbacks: {
-        session: async ({ session, user }) => {
-            if (session?.user) {
-                session.user.id = user.id;
-                // session.user.role = user.role; // You might need to extend the type
+        jwt: async ({ token, user }) => {
+            if (user) {
+                token.id = user.id
             }
-            return session;
+            return token
         },
+        session: async ({ session, token }) => {
+            if (session?.user) {
+                session.user.id = token.id as string
+            }
+            return session
+        },
+    },
+    session: {
+        strategy: "jwt",
     },
     pages: {
         signIn: '/auth/signin',

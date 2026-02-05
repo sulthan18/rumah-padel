@@ -1,4 +1,7 @@
+"use client"
+
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
+import { FadeIn, FadeInStagger } from "@/components/animations/fade-in"
 
 export function Location() {
     return (
@@ -6,7 +9,7 @@ export function Location() {
             <div className="container px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     {/* Text Info */}
-                    <div className="space-y-8">
+                    <FadeIn direction="right" className="space-y-8">
                         <div>
                             <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
                                 Lokasi Kami
@@ -47,10 +50,10 @@ export function Location() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </FadeIn>
 
                     {/* Map Embed */}
-                    <div className="relative h-[400px] w-full rounded-2xl overflow-hidden shadow-2xl border border-zinc-800">
+                    <FadeIn direction="left" className="relative h-[400px] w-full rounded-2xl overflow-hidden shadow-2xl border border-zinc-800">
                         {/* Placeholder Map - Ganti SRC dengan Real Embed Google Maps */}
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0592882895964!2d106.81125807499066!3d-6.255919693732624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f17070014023%3A0xe5529f7f5255476d!2sKemang%20Village!5e0!3m2!1sen!2sid!4v1706692735164!5m2!1sen!2sid"
@@ -62,7 +65,7 @@ export function Location() {
                             referrerPolicy="no-referrer-when-downgrade"
                             className="grayscale hover:grayscale-0 transition-all duration-500"
                         />
-                    </div>
+                    </FadeIn>
                 </div>
             </div>
         </section>

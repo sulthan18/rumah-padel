@@ -1,4 +1,7 @@
+"use client"
+
 import { Users, Star, Trophy, MessageCircle } from "lucide-react"
+import { FadeIn, FadeInStagger } from "@/components/animations/fade-in"
 
 const stats = [
     {
@@ -35,17 +38,17 @@ export function SocialProof() {
     return (
         <section className="py-12 border-b border-zinc-100 bg-white">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <FadeInStagger className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     {stats.map((stat, index) => (
-                        <div key={index} className="flex flex-col items-center text-center space-y-2 group cursor-default" style={{ animationDelay: `${index * 100}ms` }}>
+                        <FadeIn key={index} className="flex flex-col items-center text-center space-y-2 group cursor-default">
                             <div className={`p-4 rounded-full ${stat.bg} ${stat.color} mb-2 transition-transform group-hover:scale-110 duration-300`}>
                                 <stat.icon className="h-8 w-8" />
                             </div>
                             <span className="text-3xl md:text-4xl font-black tracking-tighter text-zinc-900">{stat.value}</span>
                             <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">{stat.label}</span>
-                        </div>
+                        </FadeIn>
                     ))}
-                </div>
+                </FadeInStagger>
             </div>
         </section>
     )

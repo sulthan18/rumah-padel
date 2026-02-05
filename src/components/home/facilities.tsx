@@ -1,5 +1,9 @@
+"use client"
+
 import { Coffee, ShowerHead, Store, Eye, Wifi, Car } from "lucide-react"
 import Image from "next/image"
+import { FadeIn, FadeInStagger } from "@/components/animations/fade-in"
+import { SlideIn3D } from "@/components/animations/variants"
 
 const features = [
     {
@@ -7,35 +11,40 @@ const features = [
         description: "Kaca tebal tempered glass 12mm dengan pandangan luas tanpa halangan. Main serasa di WPT.",
         icon: Eye,
         className: "md:col-span-2 md:row-span-2",
-        image: "/images/hero-bg.jpg" // Use placeholder or generic
+        image: "/images/hero-bg.jpg", // Use placeholder or generic
+        direction: "up"
     },
     {
         title: "Pro Shop",
         description: "Jual bola, raket, grip, dan apparel lengkap.",
         icon: Store,
         className: "md:col-span-1 md:row-span-1",
-        image: "/images/signup-bg.jpg"
+        image: "/images/signup-bg.jpg",
+        direction: "left"
     },
     {
         title: "Luxury Shower",
         description: "Air panas stabil, sabun premium, handuk bersih.",
         icon: ShowerHead,
         className: "md:col-span-1 md:row-span-1",
-        image: "/images/hero-bg.jpg"
+        image: "/images/hero-bg.jpg",
+        direction: "left"
     },
     {
         title: "Coffee Bar",
         description: "Espresso based coffee buat nongkrong.",
         icon: Coffee,
         className: "md:col-span-1 md:row-span-1",
-        image: "/images/signup-bg.jpg"
+        image: "/images/signup-bg.jpg",
+        direction: "right"
     },
     {
         title: "Free WiFi",
         description: "Internet kencang buat update status.",
         icon: Wifi,
         className: "md:col-span-1 md:row-span-1",
-        image: "/images/hero-bg.jpg"
+        image: "/images/hero-bg.jpg",
+        direction: "right"
     }
 ]
 
@@ -43,18 +52,24 @@ export function Facilities() {
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="mb-12 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <FadeIn direction="up" className="mb-12 text-center">
                     <h2 className="text-3xl md:text-5xl font-black tracking-tighter text-zinc-900 mb-4">
                         Premium Amenities
                     </h2>
                     <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                         Lebih dari sekadar lapangan. Kami punya fasilitas lengkap buat manjain kamu.
                     </p>
-                </div>
+                </FadeIn>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-[1200px] md:h-[600px]">
                     {features.map((feature, i) => (
-                        <div key={i} className={`relative group overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 ${feature.className} animate-in fade-in zoom-in duration-700`} style={{ animationDelay: `${i * 100}ms` }}>
+                        <SlideIn3D
+                            key={i}
+                            direction={feature.direction as any}
+                            duration={0.6}
+                            delay={i * 0.1}
+                            className={`relative group overflow-hidden rounded-3xl border border-zinc-200 bg-zinc-100 ${feature.className}`}
+                        >
                             {/* Background Image */}
                             <Image
                                 src={feature.image}
@@ -75,7 +90,7 @@ export function Facilities() {
                                     {feature.description}
                                 </p>
                             </div>
-                        </div>
+                        </SlideIn3D>
                     ))}
                 </div>
             </div>

@@ -24,7 +24,7 @@ const plans = [
     },
     {
         name: "Pro Member",
-        price: "Rp 500rb / bulan",
+        price: "Rp 800rb / bulan",
         description: "Buat kamu yang rutin main tiap minggu.",
         features: [
             "Akses Booking H-7 (Prioritas)",
@@ -35,6 +35,22 @@ const plans = [
         cta: "Join Member",
         href: "/membership",
         popular: true
+    },
+    {
+        name: "Exclusive",
+        price: "Rp 30jt / tahun",
+        description: "Status tertinggi dengan benefit tanpa batas.",
+        features: [
+            "Prioritas Pembelian Saham",
+            "Akses Event & Tur Eksklusif",
+            "Welcome Box (Jersey & Racket)",
+            "Legacy Wall Inductee",
+            "Personal Assistant Booking",
+            "All Access Pass"
+        ],
+        cta: "Apply for Exclusive",
+        href: "/membership?tier=exclusive",
+        popular: false
     }
 ]
 
@@ -51,7 +67,7 @@ export function Pricing() {
                     </p>
                 </FadeIn>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                     {plans.map((plan, index) => (
                         <SlideIn3D key={index} direction={index === 0 ? "right" : "left"} delay={index * 0.2}>
                             <Card className={`relative flex flex-col border-2 ${plan.popular ? "border-primary shadow-2xl scale-105 z-10" : "border-zinc-200 hover:border-zinc-300 shadow-md"} h-full`}>

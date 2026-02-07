@@ -28,28 +28,32 @@ const features = [
     {
         category: "Booking & Access",
         items: [
-            { name: "Booking Window", guest: "H-3", pro: "H-7 (Prioritas)" },
-            { name: "Reschedule", guest: "1x per booking", pro: "Unlimited" },
-            { name: "Court Choice", guest: "Standard Only", pro: "All Courts (Inc. Panorama)" },
-            { name: "Waitlist Priority", guest: false, pro: true },
+            { name: "Booking Window", guest: "H-3", pro: "H-7 (Prioritas)", exclusive: "H-14 (VIP Priority)" },
+            { name: "Reschedule", guest: "1x per booking", pro: "Unlimited", exclusive: "Unlimited + Any Time" },
+            { name: "Court Choice", guest: "Standard Only", pro: "All Courts", exclusive: "All Courts + Private Session" },
+            { name: "Waitlist Priority", guest: false, pro: "High", exclusive: "Top Priority (Bump)" },
+            { name: "Personal Assistant", guest: false, pro: false, exclusive: true },
         ]
     },
     {
         category: "Amenities",
         items: [
-            { name: "Locker", guest: "Public", pro: "Private + Laundry" },
-            { name: "Towel Rental", guest: "Rp 25.000", pro: "Free" },
-            { name: "Parking", guest: "Standard", pro: "VIP Slot" },
-            { name: "WiFi", guest: "Standard Speed", pro: "High Speed" },
+            { name: "Locker", guest: "Public", pro: "Private + Laundry", exclusive: "Dedicated Suite Locker" },
+            { name: "Towel Rental", guest: "Rp 25.000", pro: "Free", exclusive: "Free + Premium Robe" },
+            { name: "Parking", guest: "Standard", pro: "VIP Slot", exclusive: "Valet Service" },
+            { name: "WiFi", guest: "Standard Speed", pro: "High Speed", exclusive: "Dedicated Fiber Line" },
         ]
     },
     {
         category: "Benefits",
         items: [
-            { name: "Booking Discount", guest: "-", pro: "10% Off" },
-            { name: "F&B Discount", guest: "-", pro: "5% Off" },
-            { name: "Pro Shop Discount", guest: "-", pro: "5% Off" },
-            { name: "Event Access", guest: "General", pro: "VIP Invitation" },
+            { name: "Booking Discount", guest: "-", pro: "10% Off", exclusive: "Free Court Usage (Non-Peak)" },
+            { name: "F&B Discount", guest: "-", pro: "5% Off", exclusive: "20% All Items" },
+            { name: "Pro Shop Discount", guest: "-", pro: "5% Off", exclusive: "20% All Mechandise" },
+            { name: "Event Access", guest: "General", pro: "VIP Invitation", exclusive: "All Access + Backstage" },
+            { name: "Welcome Box", guest: false, pro: false, exclusive: "Jersey, Racket, Bag (Worth 5jt)" },
+            { name: "Legacy Wall", guest: false, pro: false, exclusive: "Name Engraved Forever" },
+            { name: "Saham Priority", guest: false, pro: false, exclusive: "Right of First Refusal" },
         ]
     }
 ]
@@ -116,11 +120,15 @@ export default function PricingPage() {
                         <Table>
                             <TableHeader className="bg-zinc-50">
                                 <TableRow className="hover:bg-zinc-50">
-                                    <TableHead className="w-[40%] pl-8 py-6 text-base font-bold text-zinc-900">Feature</TableHead>
-                                    <TableHead className="w-[30%] py-6 text-center text-base font-bold text-zinc-500">Guest</TableHead>
-                                    <TableHead className="w-[30%] py-6 text-center text-base font-bold text-primary bg-primary/5">
+                                    <TableHead className="w-[30%] pl-8 py-6 text-base font-bold text-zinc-900">Feature</TableHead>
+                                    <TableHead className="w-[20%] py-6 text-center text-base font-bold text-zinc-500">Guest</TableHead>
+                                    <TableHead className="w-[25%] py-6 text-center text-base font-bold text-primary bg-primary/5">
                                         Pro Member
                                         <Badge className="ml-2 bg-primary hover:bg-primary/90 text-[10px]">RECOMMENDED</Badge>
+                                    </TableHead>
+                                    <TableHead className="w-[25%] py-6 text-center text-base font-bold text-amber-700 bg-amber-50">
+                                        Exclusive
+                                        <Badge className="ml-2 bg-black text-amber-400 border border-amber-600 hover:bg-zinc-900 text-[10px]">LIMITED</Badge>
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -129,7 +137,7 @@ export default function PricingPage() {
                                     <React.Fragment key={`section-${sIndex}`}>
                                         {/* Category Header */}
                                         <TableRow className="bg-zinc-50/50 hover:bg-zinc-50/50">
-                                            <TableCell colSpan={3} className="pl-8 py-3 font-semibold text-xs uppercase tracking-wider text-zinc-500">
+                                            <TableCell colSpan={4} className="pl-8 py-3 font-semibold text-xs uppercase tracking-wider text-zinc-500">
                                                 {section.category}
                                             </TableCell>
                                         </TableRow>
@@ -155,6 +163,13 @@ export default function PricingPage() {
                                                         item.pro ? <Check className="h-5 w-5 text-green-500 mx-auto stroke-[3]" /> : <Minus className="h-5 w-5 text-zinc-300 mx-auto" />
                                                     ) : (
                                                         item.pro
+                                                    )}
+                                                </TableCell>
+                                                <TableCell className="text-center py-4 font-bold text-amber-900 bg-amber-50/30 border-l border-amber-100">
+                                                    {typeof item.exclusive === 'boolean' ? (
+                                                        item.exclusive ? <Check className="h-5 w-5 text-amber-600 mx-auto stroke-[3]" /> : <Minus className="h-5 w-5 text-zinc-300 mx-auto" />
+                                                    ) : (
+                                                        item.exclusive
                                                     )}
                                                 </TableCell>
                                             </TableRow>

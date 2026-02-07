@@ -8,12 +8,27 @@ import { CourtType, CourtSurface } from "@prisma/client"
 
 export const dynamic = "force-dynamic"
 
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
+
 export default async function CourtsPage({
     searchParams,
 }: {
-    searchParams: { type?: string; surface?: string }
+    searchParams: { type?: string; surface?: string; q?: string; page?: string }
 }) {
-    // 1. Build Filter
+    // 1. Parse Params
+    const query = searchParams.q || ""
+    const currentPage = Number(searchParams.page) || 1
+    const pageSize = 6
+    const skip = (currentPage - 1) * pageSize
+
+    // 2. Build Filter
     const where: any = { isActive: true }
 
     if (searchParams.type && ["INDOOR", "OUTDOOR"].includes(searchParams.type)) {
@@ -24,14 +39,27 @@ export default async function CourtsPage({
         where.surface = searchParams.surface as CourtSurface
     }
 
-    // 2. Fetch Courts
-    const courts = await prisma.court.findMany({
-        where,
-        orderBy: { name: "asc" }
-    })
+    if (query) {
+        where.OR = [
+            { name: { contains: query, mode: 'insensitive' } },
+            { description: { contains: query, mode: 'insensitive' } }
+        ]
+    }
 
-    // 3. Fetch Live Availability for each court
-    // We run this in parallel for performance
+    // 3. Fetch Data (Parallel Count & Find)
+    const [totalCourts, courts] = await Promise.all([
+        prisma.court.count({ where }),
+        prisma.court.findMany({
+            where,
+            orderBy: { name: "asc" },
+            skip,
+            take: pageSize
+        })
+    ])
+
+    const totalPages = Math.ceil(totalCourts / pageSize)
+
+    // 4. Fetch Live Availability
     const courtsWithStatus = await Promise.all(courts.map(async (court) => {
         const availability = await BookingEngine.getAvailability(court.id, new Date())
 
@@ -83,11 +111,11 @@ export default async function CourtsPage({
                     </aside>
 
                     {/* Grid */}
-                    <div className="flex-1">
+                    <div className="flex-1 space-y-12">
                         {courtsWithStatus.length === 0 ? (
                             <div className="text-center py-20 bg-white rounded-3xl border border-zinc-200">
                                 <h3 className="text-xl font-bold text-zinc-900 mb-2">No courts found</h3>
-                                <p className="text-zinc-500">Try adjusting your filters.</p>
+                                <p className="text-zinc-500">Try adjusting your filters or search query.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,6 +128,40 @@ export default async function CourtsPage({
                                     />
                                 ))}
                             </div>
+                        )}
+
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
+                                            href={`/courts?page=${Math.max(1, currentPage - 1)}&q=${query}`}
+                                            aria-disabled={currentPage <= 1}
+                                            className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                                        />
+                                    </PaginationItem>
+
+                                    {Array.from({ length: totalPages }).map((_, i) => (
+                                        <PaginationItem key={i}>
+                                            <PaginationLink
+                                                href={`/courts?page=${i + 1}&q=${query}`}
+                                                isActive={currentPage === i + 1}
+                                            >
+                                                {i + 1}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ))}
+
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            href={`/courts?page=${Math.min(totalPages, currentPage + 1)}&q=${query}`}
+                                            aria-disabled={currentPage >= totalPages}
+                                            className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
                         )}
                     </div>
                 </div>

@@ -6,53 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Link from "next/link"
 import { FadeIn, FadeInStagger } from "@/components/animations/fade-in"
 import { SlideIn3D } from "@/components/animations/variants"
-
-const plans = [
-    {
-        name: "Guest",
-        price: "Pay-as-you-go",
-        description: "Main santai tanpa komitmen bulanan.",
-        features: [
-            "Akses Booking H-3",
-            "Harga Normal",
-            "Akses Fasilitas Standar",
-            "Public Locker"
-        ],
-        cta: "Booking Sekarang",
-        href: "/booking",
-        popular: false
-    },
-    {
-        name: "Pro Member",
-        price: "Rp 800rb / bulan",
-        description: "Buat kamu yang rutin main tiap minggu.",
-        features: [
-            "Akses Booking H-7 (Prioritas)",
-            "Diskon 10% Setiap Booking",
-            "Private Locker",
-            "Free Towel Rental"
-        ],
-        cta: "Join Member",
-        href: "/membership",
-        popular: true
-    },
-    {
-        name: "Exclusive",
-        price: "Rp 30jt / tahun",
-        description: "Status tertinggi dengan benefit tanpa batas.",
-        features: [
-            "Prioritas Pembelian Saham",
-            "Akses Event & Tur Eksklusif",
-            "Welcome Box (Jersey & Racket)",
-            "Legacy Wall Inductee",
-            "Personal Assistant Booking",
-            "All Access Pass"
-        ],
-        cta: "Apply for Exclusive",
-        href: "/membership?tier=exclusive",
-        popular: false
-    }
-]
+import { PRICING_PLANS } from "@/features/home/config/pricing-plans"
 
 export function Pricing() {
     return (
@@ -68,7 +22,7 @@ export function Pricing() {
                 </FadeIn>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                    {plans.map((plan, index) => (
+                    {PRICING_PLANS.map((plan, index) => (
                         <SlideIn3D key={index} direction={index === 0 ? "right" : "left"} delay={index * 0.2}>
                             <Card className={`relative flex flex-col border-2 ${plan.popular ? "border-primary shadow-2xl scale-105 z-10" : "border-zinc-200 hover:border-zinc-300 shadow-md"} h-full`}>
                                 {plan.popular && (

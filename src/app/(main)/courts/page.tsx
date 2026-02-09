@@ -137,8 +137,9 @@ export default async function CourtsPage({
                                     <PaginationItem>
                                         <PaginationPrevious
                                             href={`/courts?page=${Math.max(1, currentPage - 1)}&q=${query}`}
-                                            aria-disabled={currentPage <= 1}
-                                            className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                                            aria-disabled={currentPage === 1}
+                                            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                                            size="default"
                                         />
                                     </PaginationItem>
 
@@ -147,6 +148,7 @@ export default async function CourtsPage({
                                             <PaginationLink
                                                 href={`/courts?page=${i + 1}&q=${query}`}
                                                 isActive={currentPage === i + 1}
+                                                size="default"
                                             >
                                                 {i + 1}
                                             </PaginationLink>
@@ -156,8 +158,9 @@ export default async function CourtsPage({
                                     <PaginationItem>
                                         <PaginationNext
                                             href={`/courts?page=${Math.min(totalPages, currentPage + 1)}&q=${query}`}
-                                            aria-disabled={currentPage >= totalPages}
-                                            className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                                            aria-disabled={currentPage === totalPages}
+                                            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                                            size="default"
                                         />
                                     </PaginationItem>
                                 </PaginationContent>

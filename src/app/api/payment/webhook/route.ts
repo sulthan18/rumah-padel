@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { midtrans } from "@/lib/midtrans"
+import { achievementEngine } from "@/lib/achievement-engine"
 
 export async function POST(request: NextRequest) {
     try {
@@ -84,6 +85,32 @@ export async function POST(request: NextRequest) {
                 where: { id: order_id },
                 data: { status: bookingStatus },
             })
+        }
+
+        // Award loyalty points and achievements if booking is confirmed and has a user
+        if (bookingStatus === "CONFIRMED" && booking.userId) {
+            // Award loyalty points
+            const pointsToAward = Math.floor(booking.totalPrice / 10000) * 10;
+            if (pointsToAward > 0) {
+                await prisma.loyaltyPoint.create({
+                    data: {
+                        userId: booking.userId,
+                        points: pointsToAward,
+                        reason: `Booking #${booking.id}`,
+                    },
+                });
+                await prisma.user.update({
+                    where: { id: booking.userId },
+                    data: {
+                        loyaltyPointsBalance: {
+                            increment: pointsToAward,
+                        },
+                    },
+                });
+            }
+
+            // Check for achievements
+            await achievementEngine.checkAndAward(booking.userId, 'booking_confirmed');
         }
 
         // TODO: Send confirmation email if booking confirmed

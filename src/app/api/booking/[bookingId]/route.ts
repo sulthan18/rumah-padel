@@ -1,10 +1,6 @@
-/**
- * GET /api/booking/[bookingId]
- * Fetch booking details by ID
- */
-
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { sendWaitlistNotificationEmail } from "@/lib/email"
 
 export const dynamic = "force-dynamic"
 
@@ -84,6 +80,59 @@ export async function GET(
             },
             { status: 500 }
         )
+    }
+}
+
+export async function DELETE(
+    request: NextRequest,
+    { params }: { params: { bookingId: string } }
+) {
+    try {
+        const booking = await prisma.booking.findUnique({
+            where: { id: params.bookingId },
+            include: { court: true }
+        });
+
+        if (!booking) {
+            return NextResponse.json({ message: "Booking not found" }, { status: 404 });
+        }
+
+        await prisma.booking.update({
+            where: { id: params.bookingId },
+            data: { status: 'CANCELLED' },
+        });
+
+        const waitlistEntries = await prisma.waitlistEntry.findMany({
+            where: {
+                courtId: booking.courtId,
+                startTime: booking.startTime,
+            },
+            include: {
+                user: true,
+            },
+        });
+
+        for (const entry of waitlistEntries) {
+            await sendWaitlistNotificationEmail({
+                to: entry.user.email,
+                customerName: entry.user.name || 'Player',
+                courtName: booking.court.name,
+                date: booking.startTime.toLocaleDateString(),
+                time: booking.startTime.toLocaleTimeString(),
+            });
+        }
+        
+        await prisma.waitlistEntry.deleteMany({
+            where: {
+                courtId: booking.courtId,
+                startTime: booking.startTime,
+            }
+        })
+
+        return NextResponse.json({ message: "Booking cancelled successfully" });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }
 

@@ -12,7 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
-import { User, LogOut, Calendar, Zap, History } from "lucide-react"
+import { User, LogOut, Calendar, Zap, History, Users } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function UserMenu() {
@@ -79,15 +79,21 @@ export function UserMenu() {
                 )}
 
                 <DropdownMenuItem asChild>
-                    <Link href="/dashboard/bookings" className="cursor-pointer py-2.5">
+                    <Link href="/bookings" className="cursor-pointer py-2.5">
                         <History className="mr-2 h-4 w-4" />
                         <span>Riwayat Booking</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href="/dashboard/profile" className="cursor-pointer py-2.5">
+                    <Link href="/profile" className="cursor-pointer py-2.5">
                         <User className="mr-2 h-4 w-4" />
                         <span>Profile</span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/profile/friends" className="cursor-pointer py-2.5">
+                        <Users className="mr-2 h-4 w-4" />
+                        <span>Friends</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

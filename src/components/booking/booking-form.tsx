@@ -21,7 +21,15 @@ export function BookingForm() {
         toggleSlot,
         submitBooking,
         isSubmitting,
-        isAuthenticated
+        isAuthenticated,
+        lookingForPlayers,
+        setLookingForPlayers,
+        isRecurring,
+        setIsRecurring,
+        recurringRule,
+        setRecurringRule,
+        recurringEndDate,
+        setRecurringEndDate,
     } = useBooking()
 
     // Fetch slots whenever court or date changes
@@ -76,6 +84,8 @@ export function BookingForm() {
                             selectedSlots={selectedSlots}
                             isLoading={isLoading}
                             onToggle={toggleSlot}
+                            selectedCourt={selectedCourt}
+                            selectedDate={selectedDate}
                         />
                     )}
                 </section>
@@ -97,6 +107,14 @@ export function BookingForm() {
                         onConfirm={submitBooking}
                         isSubmitting={isSubmitting}
                         isAuthenticated={isAuthenticated}
+                        lookingForPlayers={lookingForPlayers}
+                        onLookingForPlayersChange={setLookingForPlayers}
+                        isRecurring={isRecurring}
+                        onIsRecurringChange={setIsRecurring}
+                        recurringRule={recurringRule}
+                        onRecurringRuleChange={setRecurringRule}
+                        recurringEndDate={recurringEndDate}
+                        onRecurringEndDateChange={setRecurringEndDate}
                     />
                 )}
             </div>

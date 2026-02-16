@@ -26,6 +26,17 @@ export const authOptions: NextAuthOptions = {
         session: async ({ session, token }) => {
             if (session?.user) {
                 session.user.id = token.id as string
+                const userWithAchievements = await prisma.user.findUnique({
+                    where: { id: token.id as string },
+                    include: {
+                        achievements: {
+                            include: {
+                                achievement: true,
+                            },
+                        },
+                    },
+                });
+                (session.user as any).achievements = userWithAchievements?.achievements || [];
             }
             return session
         },

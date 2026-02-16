@@ -8,10 +8,12 @@ declare module "next-auth" {
         user: {
             id: string
             role?: "USER" | "ADMIN"
+            achievements?: any[]
         } & DefaultSession["user"]
     }
 
     interface User {
         role?: "USER" | "ADMIN"
+        achievements?: any[]
     }
 }

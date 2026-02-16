@@ -17,11 +17,11 @@ export const ROUTES = {
     SIGN_IN: '/auth/signin',
     SIGN_UP: '/auth/signup',
 
-    // Dashboard routes
-    DASHBOARD: '/dashboard',
-    PROFILE: '/dashboard/profile',
-    MY_BOOKINGS: '/dashboard/bookings',
-    MY_TOURNAMENTS: '/dashboard/tournaments',
+    // Profile/User routes
+    DASHBOARD: '/profile', // Redirect legacy dashboard to profile
+    PROFILE: '/profile',
+    MY_BOOKINGS: '/bookings',
+    MY_TOURNAMENTS: '/tournaments',
 
     // API routes
     API: {

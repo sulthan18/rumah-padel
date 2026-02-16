@@ -13,6 +13,12 @@ enum Role {
   ADMIN
 }
 
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 enum MembershipTier {
   GUEST
   PRO
@@ -26,23 +32,49 @@ enum BookingStatus {
 }
 
 model User {
-  id                  String          @id @default(cuid())
-  name                String?
-  email               String          @unique
-  emailVerified       DateTime?
-  image               String?
-  role                Role            @default(USER)
-  membershipTier      MembershipTier  @default(GUEST)
-  membershipExpiresAt DateTime?
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime        @updatedAt
+  id                     String          @id @default(cuid())
+  name                   String?
+  email                  String          @unique
+  emailVerified          DateTime?
+  image                  String?
+  role                   Role            @default(USER)
+  membershipTier         MembershipTier  @default(GUEST)
+  membershipExpiresAt    DateTime?
+  skillLevel             SkillLevel      @default(BEGINNER)
+  availability           Json?
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  loyaltyPointsBalance   Int             @default(0)
   
-  accounts      Account[]
-  sessions      Session[]
-  bookings      Booking[]
+  accounts               Account[]
+  sessions               Session[]
+  bookings               Booking[]
   
   // Tournament Relations
-  captainTeams  Team[]          @relation("TeamCaptain")
+  captainTeams           Team[]          @relation("TeamCaptain")
+
+  // Friend Relations
+  sentFriendRequests     Friend[]        @relation("sentFriendRequests")
+  receivedFriendRequests Friend[]        @relation("receivedFriendRequests")
+
+  // Messaging Relations
+  conversations          Conversation[]  @relation("ConversationUsers")
+  messages               Message[]
+
+  // Match Relations
+  matches                MatchPlayer[]
+
+  // Loyalty Points Relations
+  loyaltyPoints          LoyaltyPoint[]
+
+  // Achievements Relations
+  achievements           UserAchievement[]
+
+  // Recurring Bookings Relations
+  recurringBookings      RecurringBooking[]
+
+  // Waitlist Relations
+  waitlistEntries        WaitlistEntry[]
 }
 
 // ... (Account, Session, VerificationToken, Court models remain unchanged)
@@ -58,6 +90,46 @@ model User {
 // but "replace_file_content" is better with specific targets.
 
 // Let's replace from `enum Role` down to `model Account` start to inject MembershipTier and User updates.
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+}
+
+model Friend {
+  id           String           @id @default(cuid())
+  requesterId  String
+  receiverId   String
+  status       FriendshipStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  requester    User             @relation("sentFriendRequests", fields: [requesterId], references: [id], onDelete: Cascade)
+  receiver     User             @relation("receivedFriendRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, receiverId])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  users     User[]    @relation("ConversationUsers")
+  messages  Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  body           String       @db.Text
+  conversationId String
+  senderId       String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
 
 
 // NextAuth models
@@ -107,41 +179,44 @@ enum CourtSurface {
 }
 
 model Court {
-  id           String       @id @default(cuid())
-  name         String
-  description  String?
-  pricePerHour Int          // Rupiah
-  type         CourtType    @default(INDOOR)
-  surface      CourtSurface @default(CARPET)
-  isActive     Boolean      @default(true)
-  imageUrl     String?      // For the card display
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id                 String             @id @default(cuid())
+  name               String
+  description        String?
+  pricePerHour       Int                // Rupiah
+  type               CourtType          @default(INDOOR)
+  surface            CourtSurface       @default(CARPET)
+  isActive           Boolean            @default(true)
+  imageUrl           String?            // For the card display
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
 
-  bookings     Booking[]
+  bookings           Booking[]
+  recurringBookings  RecurringBooking[]
+  waitlistEntries    WaitlistEntry[]
 }
 
 model Booking {
-  id            String        @id @default(cuid())
-  userId        String?       // Made optional for guest bookings
-  courtId       String
-  startTime     DateTime
-  endTime       DateTime
-  totalPrice    Int           // Rupiah (Final price after discount)
-  originalPrice Int           @default(0)
-  discountApplied Int         @default(0)
-  status        BookingStatus @default(PENDING)
+  id                String        @id @default(cuid())
+  userId            String?       // Made optional for guest bookings
+  courtId           String
+  startTime         DateTime
+  endTime           DateTime
+  totalPrice        Int           // Rupiah (Final price after discount)
+  originalPrice     Int           @default(0)
+  discountApplied   Int           @default(0)
+  status            BookingStatus @default(PENDING)
+  lookingForPlayers Boolean       @default(false)
   
   // Customer details (for guest bookings or override)
-  customerName  String?
-  customerEmail String?
-  customerPhone String?
+  customerName      String?
+  customerEmail     String?
+  customerPhone     String?
   
   // Promo Code
-  promoCodeId   String?
+  promoCodeId       String?
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 
   user      User?      @relation(fields: [userId], references: [id])
   court     Court      @relation(fields: [courtId], references: [id])
@@ -152,6 +227,33 @@ model Booking {
   @@index([courtId, startTime, endTime])
   @@index([userId])
   @@index([status])
+}
+
+model RecurringBooking {
+  id        String   @id @default(cuid())
+  userId    String
+  courtId   String
+  startTime DateTime
+  endTime   DateTime
+  rule      String   // "weekly" or "bi-weekly"
+  endDate   DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  court     Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  courtId   String
+  startTime DateTime
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  court     Court    @relation(fields: [courtId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courtId, startTime])
 }
 
 model PromoCode {
@@ -260,4 +362,65 @@ model TMatch {
   teamA         Team?      @relation("HomeTeam", fields: [teamAId], references: [id])
   teamB         Team?      @relation("AwayTeam", fields: [teamBId], references: [id])
   winner        Team?      @relation("MatchWinner", fields: [winnerId], references: [id])
+}
+
+model Match {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  teamAScore  Int
+  teamBScore  Int
+  winnerTeam  String // "A" or "B"
+
+  players     MatchPlayer[]
+}
+
+model MatchPlayer {
+  matchId   String
+  userId    String
+  team      String // "A" or "B"
+
+  match     Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([matchId, userId])
+}
+
+model LoyaltyPoint {
+  id        String   @id @default(cuid())
+  userId    String
+  points    Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Reward {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  pointsCost  Int
+  isActive    Boolean @default(true)
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  name             String
+  description      String
+  icon             String
+  criteria         Json
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  userId        String
+  achievementId String
+  createdAt     DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, achievementId])
 }

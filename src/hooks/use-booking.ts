@@ -13,6 +13,10 @@ export function useBooking() {
     const [selectedCourt, setSelectedCourt] = useState<string | undefined>(undefined)
     const [selectedSlots, setSelectedSlots] = useState<string[]>([])
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [lookingForPlayers, setLookingForPlayers] = useState(false)
+    const [isRecurring, setIsRecurring] = useState(false)
+    const [recurringRule, setRecurringRule] = useState<'weekly' | 'bi-weekly'>('weekly')
+    const [recurringEndDate, setRecurringEndDate] = useState<Date | undefined>(undefined)
 
     const toggleSlot = (time: string) => {
         if (selectedSlots.includes(time)) {
@@ -38,6 +42,11 @@ export function useBooking() {
             return
         }
 
+        if (isRecurring && !recurringEndDate) {
+            toast.error("Please select an end date for the recurring booking.");
+            return;
+        }
+
         // Get court details
         const courtDetails = COURTS_DATA.find(c => c.id === selectedCourt)
         if (!courtDetails) {
@@ -52,6 +61,10 @@ export function useBooking() {
             date: format(selectedDate, "yyyy-MM-dd"),
             slots: selectedSlots,
             pricePerHour: courtDetails.pricePerHour,
+            lookingForPlayers: lookingForPlayers,
+            isRecurring: isRecurring,
+            recurringRule: recurringRule,
+            recurringEndDate: recurringEndDate ? format(recurringEndDate, "yyyy-MM-dd") : undefined,
         }
 
         sessionStorage.setItem("pendingBooking", JSON.stringify(bookingData))
@@ -76,5 +89,13 @@ export function useBooking() {
         submitBooking,
         isSubmitting,
         isAuthenticated: !!session,
+        lookingForPlayers,
+        setLookingForPlayers,
+        isRecurring,
+        setIsRecurring,
+        recurringRule,
+        setRecurringRule,
+        recurringEndDate,
+        setRecurringEndDate,
     }
 }

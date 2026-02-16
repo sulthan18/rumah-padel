@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} prisma/seed.ts",
+    "seed:achievements": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} prisma/seed-achievements.ts",
+    "seed:all": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"} prisma/seed-all.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -49,6 +51,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20.19.30",
     "@types/react": "^19",

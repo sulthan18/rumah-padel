@@ -8,6 +8,7 @@ import { BookingStatus } from '@/shared/enums'
 
 // Re-export BookingStatus from shared enums to maintain compatibility if needed, 
 // or prefer using the enum directly. for now, using the enum as type.
+export { BookingStatus }
 
 export interface Booking {
     id: string

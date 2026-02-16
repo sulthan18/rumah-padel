@@ -19,7 +19,8 @@ const createBookingSchema = z.object({
     customerEmail: z.string().email("Valid email is required"),
     customerPhone: z.string().min(10, "Valid phone number is required"),
     promoCode: z.string().optional(),
-    userId: z.string().optional() // Optional, provided if logged in
+    userId: z.string().optional(), // Optional, provided if logged in
+    lookingForPlayers: z.boolean().optional(),
 })
 
 export async function POST(request: NextRequest) {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const { courtId, date, slots, customerName, customerEmail, customerPhone, promoCode, userId } = validation.data
+        const { courtId, date, slots, customerName, customerEmail, customerPhone, promoCode, userId, lookingForPlayers } = validation.data
 
         // 1. Fetch User (if applicable) for Membership Check
         let user = null
@@ -120,6 +121,7 @@ export async function POST(request: NextRequest) {
                 customerName,
                 customerEmail,
                 customerPhone,
+                lookingForPlayers: lookingForPlayers || false,
             },
         })
 

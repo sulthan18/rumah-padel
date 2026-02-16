@@ -21,6 +21,10 @@ interface BookingData {
     date: string
     slots: string[]
     pricePerHour: number
+    lookingForPlayers: boolean
+    isRecurring: boolean
+    recurringRule: 'weekly' | 'bi-weekly'
+    recurringEndDate?: string
 }
 
 declare global {
@@ -98,8 +102,9 @@ export default function CheckoutPage() {
         setIsProcessing(true)
 
         try {
+            const endpoint = bookingData.isRecurring ? "/api/recurring-bookings" : "/api/booking";
             // Call backend to create booking and get snap token
-            const response = await fetch("/api/booking", {
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -107,6 +112,7 @@ export default function CheckoutPage() {
                     customerName: name,
                     customerEmail: email,
                     customerPhone: phone,
+                    userId: session?.user.id,
                 }),
             })
 
@@ -116,7 +122,8 @@ export default function CheckoutPage() {
                 throw new Error(result.message || "Booking failed")
             }
 
-            const { bookingId, snapToken } = result.data
+            const { bookingId, snapToken } = result.bookingId ? result : { bookingId: result.data.bookingId, snapToken: result.data.snapToken };
+
 
             // Open Midtrans Snap popup
             window.snap.pay(snapToken, {

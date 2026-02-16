@@ -3,15 +3,18 @@ import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { TimeSlot } from "@/types"
 import { Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 interface TimeSlotGridProps {
     slots: TimeSlot[]
     selectedSlots: string[]
     isLoading: boolean
     onToggle: (time: string) => void
+    selectedCourt: string | undefined
+    selectedDate: Date | undefined
 }
 
-export function TimeSlotGrid({ slots, selectedSlots, isLoading, onToggle }: TimeSlotGridProps) {
+export function TimeSlotGrid({ slots, selectedSlots, isLoading, onToggle, selectedCourt, selectedDate }: TimeSlotGridProps) {
     if (isLoading) {
         return (
             <div className="flex justify-center p-8">
@@ -30,6 +33,29 @@ export function TimeSlotGrid({ slots, selectedSlots, isLoading, onToggle }: Time
         )
     }
 
+    const handleJoinWaitlist = async (time: string) => {
+        if (!selectedCourt || !selectedDate) {
+            toast.error("Please select a court and date first.");
+            return;
+        }
+
+        const [hour, minute] = time.split(':').map(Number);
+        const startTime = new Date(selectedDate);
+        startTime.setHours(hour, minute, 0, 0);
+
+        const res = await fetch('/api/waitlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ courtId: selectedCourt, startTime }),
+        });
+
+        if (res.ok) {
+            toast.success("You have been added to the waitlist.");
+        } else {
+            toast.error("Failed to join the waitlist.");
+        }
+    };
+
     return (
         <div className="space-y-4">
             <h3 className="text-lg font-semibold">3. Select Time Slots</h3>
@@ -37,6 +63,20 @@ export function TimeSlotGrid({ slots, selectedSlots, isLoading, onToggle }: Time
                 {slots.map((slot) => {
                     const isSelected = selectedSlots.includes(slot.time)
                     const isAvailable = slot.available
+
+                    if (!isAvailable) {
+                        return (
+                            <Button
+                                key={slot.time}
+                                variant="outline"
+                                className="h-14 flex flex-col items-center justify-center p-0 transition-all"
+                                onClick={() => handleJoinWaitlist(slot.time)}
+                            >
+                                <span className="text-sm font-medium">{slot.time}</span>
+                                <span className="text-xs uppercase text-blue-500">Join Waitlist</span>
+                            </Button>
+                        )
+                    }
 
                     return (
                         <Button

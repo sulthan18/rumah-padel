@@ -20,7 +20,7 @@ import {
 export default async function CourtsPage({
     searchParams,
 }: {
-    searchParams: { type?: string; surface?: string; q?: string; page?: string }
+    searchParams: { type?: string; surface?: string; q?: string; page?: string; courtProviderId?: string }
 }) {
     // 1. Parse Params
     const query = searchParams.q || ""
@@ -39,6 +39,11 @@ export default async function CourtsPage({
         where.surface = searchParams.surface as CourtSurface
     }
 
+    // New: Filter by courtProviderId
+    if (searchParams.courtProviderId) {
+        where.courtProviderId = searchParams.courtProviderId;
+    }
+
     if (query) {
         where.OR = [
             { name: { contains: query, mode: 'insensitive' } },
@@ -53,7 +58,10 @@ export default async function CourtsPage({
             where,
             orderBy: { name: "asc" },
             skip,
-            take: pageSize
+            take: pageSize,
+            include: {
+                courtProvider: true, // Include court provider data
+            }
         })
     ])
 

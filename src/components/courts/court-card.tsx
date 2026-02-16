@@ -1,6 +1,6 @@
 "use client"
 
-import { Court } from "@prisma/client"
+import { Court, CourtProvider } from "@prisma/client"
 import { motion } from "framer-motion"
 import { Calendar, Users, Info, ArrowRight, Sun, Cloud, Check } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -10,7 +10,7 @@ import { SlideIn3D } from "@/components/animations/variants"
 import Image from "next/image"
 
 interface CourtCardProps {
-    court: Court
+    court: Court & { courtProvider: CourtProvider }
     index: number
     status?: {
         status: string // "Available", "Fully Booked", "Limited Slots"
@@ -66,6 +66,7 @@ export function CourtCard({ court, index, status }: CourtCardProps) {
                     </div>
 
                     <div className="absolute bottom-4 left-4 text-white">
+                        <p className="text-sm font-medium text-zinc-200 mb-1">{court.courtProvider.name}</p>
                         <h3 className="text-2xl font-black tracking-tighter mb-1">{court.name}</h3>
                         <p className="text-zinc-300 text-sm line-clamp-1">{court.description || "Premium Padel Court"}</p>
                     </div>

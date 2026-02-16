@@ -36,5 +36,6 @@ export const config = {
         "/profile/:path*",
         "/auth/:path*",
         "/api/bookings/:path*",
+        "/booking/:path*", // Protect booking pages
     ],
 }

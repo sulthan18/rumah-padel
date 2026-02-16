@@ -209,6 +209,9 @@ export async function createBooking(
     // Check if court exists
     const court = await prisma.court.findUnique({
         where: { id: courtId },
+        include: {
+            courtProvider: true, // Include the associated court provider
+        },
     })
     if (!court) {
         throw new Error("Court not found")

@@ -1,5 +1,6 @@
 import { PrismaClient, SkillLevel } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import { seedCourtProviders } from './seed-court-providers'; // Import the new seed function
 
 const prisma = new PrismaClient();
 
@@ -20,8 +21,12 @@ async function main() {
   await prisma.booking.deleteMany({});
   await prisma.team.deleteMany({});
   await prisma.tournament.deleteMany({});
+  await prisma.court.deleteMany({}); // Added
+  await prisma.courtProvider.deleteMany({}); // Added
   await prisma.user.deleteMany({});
 
+  // Seed Court Providers first
+  await seedCourtProviders();
 
   // 1. Create 50 users in bulk
   const usersData = [];

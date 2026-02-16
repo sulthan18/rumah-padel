@@ -6,6 +6,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/animations/fade-in"
 import { Search } from "lucide-react"
+import useSWR from "swr"; // Import useSWR
+import { CourtProvider } from "@prisma/client"; // Import CourtProvider type
 
 export function CourtFilters() {
     const router = useRouter()
@@ -13,6 +15,13 @@ export function CourtFilters() {
 
     const currentType = searchParams.get("type") // INDOOR | OUTDOOR
     const currentSurface = searchParams.get("surface") // GRASS | CARPET
+
+    // Fetch court providers
+    const fetcher = (url: string) => fetch(url).then((res) => res.json());
+    const { data: courtProviders, error: providersError } = useSWR<CourtProvider[]>("/api/court-providers", fetcher);
+    const currentProviderId = searchParams.get("courtProviderId");
+
+    if (providersError) console.error("Failed to load court providers:", providersError);
 
     const updateFilter = (key: string, value: string | null) => {
         const params = new URLSearchParams(searchParams.toString())
@@ -112,6 +121,35 @@ export function CourtFilters() {
                                     <Label htmlFor="surf-grass" className="font-medium cursor-pointer">Artificial Grass</Label>
                                 </div>
                             </RadioGroup>
+                        </div>
+
+                        {/* Separator */}
+                        <div className="h-px bg-zinc-100" />
+
+                        {/* Court Provider */}
+                        <div className="space-y-4">
+                            <Label className="text-zinc-500 font-semibold uppercase text-xs tracking-wider">Court Provider</Label>
+                            {courtProviders ? (
+                                <RadioGroup
+                                    defaultValue={currentProviderId || "ALL"}
+                                    onValueChange={(val) => updateFilter("courtProviderId", val !== "ALL" ? val : null)}
+                                >
+                                    <div className="flex items-center space-x-2">
+                                        <RadioGroupItem value="ALL" id="provider-all" />
+                                        <Label htmlFor="provider-all" className="font-medium cursor-pointer">All Providers</Label>
+                                    </div>
+                                    {courtProviders.map((provider) => (
+                                        <div key={provider.id} className="flex items-center space-x-2">
+                                            <RadioGroupItem value={provider.id} id={`provider-${provider.id}`} />
+                                            <Label htmlFor={`provider-${provider.id}`} className="font-medium cursor-pointer">
+                                                {provider.name}
+                                            </Label>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
+                            ) : (
+                                <p className="text-zinc-400 text-sm">Loading providers...</p>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,8 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
+import { getServerSession } from "next-auth" // Import getServerSession
+import { authOptions } from "@/lib/auth" // Import authOptions
 import { prisma } from "@/lib/prisma"
 import { midtrans } from "@/lib/midtrans"
 import { BookingEngine } from "@/lib/booking-engine"
@@ -19,12 +21,21 @@ const createBookingSchema = z.object({
     customerEmail: z.string().email("Valid email is required"),
     customerPhone: z.string().min(10, "Valid phone number is required"),
     promoCode: z.string().optional(),
-    userId: z.string().optional(), // Optional, provided if logged in
     lookingForPlayers: z.boolean().optional(),
 })
 
 export async function POST(request: NextRequest) {
     try {
+        // 0. Authenticate User
+        const session = await getServerSession(authOptions)
+        if (!session || !session.user || !session.user.id) {
+            return NextResponse.json(
+                { success: false, error: "Unauthorized", message: "You must be logged in to book" },
+                { status: 401 }
+            )
+        }
+        const userId = session.user.id // Get userId from session
+
         // Parse request body
         const body = await request.json()
 
@@ -42,12 +53,15 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const { courtId, date, slots, customerName, customerEmail, customerPhone, promoCode, userId, lookingForPlayers } = validation.data
+        const { courtId, date, slots, customerName, customerEmail, customerPhone, promoCode, lookingForPlayers } = validation.data
 
-        // 1. Fetch User (if applicable) for Membership Check
-        let user = null
-        if (userId) {
-            user = await prisma.user.findUnique({ where: { id: userId } })
+        // 1. Fetch User (now mandatory) for Membership Check
+        const user = await prisma.user.findUnique({ where: { id: userId } })
+        if (!user) {
+            return NextResponse.json(
+                { success: false, error: "User not found", message: "Authenticated user not found in database" },
+                { status: 404 }
+            )
         }
 
         // 2. Validate Booking Rules (Windows, Limits)
@@ -110,7 +124,7 @@ export async function POST(request: NextRequest) {
         const booking = await prisma.booking.create({
             data: {
                 courtId,
-                userId: user?.id,
+                userId, // Now directly use the userId from session
                 startTime,
                 endTime,
                 totalPrice: pricing.totalPrice,

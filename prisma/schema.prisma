@@ -25,6 +25,19 @@ enum MembershipTier {
   EXCLUSIVE
 }
 
+model CourtProvider {
+  id              String    @id @default(cuid())
+  name            String    @unique
+  address         String?
+  contactEmail    String?   @unique
+  contactPhone    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  users           User[]
+  courts          Court[]
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -45,6 +58,10 @@ model User {
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
   loyaltyPointsBalance   Int             @default(0)
+
+  // New relation for CourtProvider
+  courtProviderId        String?
+  courtProvider          CourtProvider?  @relation(fields: [courtProviderId], references: [id])
   
   accounts               Account[]
   sessions               Session[]
@@ -189,6 +206,10 @@ model Court {
   imageUrl           String?            // For the card display
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
+
+  // New relation for CourtProvider
+  courtProviderId    String
+  courtProvider      CourtProvider      @relation(fields: [courtProviderId], references: [id])
 
   bookings           Booking[]
   recurringBookings  RecurringBooking[]

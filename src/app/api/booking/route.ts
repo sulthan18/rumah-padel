@@ -181,7 +181,13 @@ export async function POST(request: NextRequest) {
             })
         } catch (error) {
             await prisma.booking.delete({ where: { id: booking.id } })
-            // Revert promo usage count if failed? ideally yes, simplistic here
+            // Revert promo usage count if failed
+            if (pricing.promoCodeId) {
+                await prisma.promoCode.update({
+                    where: { id: pricing.promoCodeId },
+                    data: { usedCount: { decrement: 1 } }
+                })
+            }
             throw error
         }
 

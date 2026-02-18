@@ -7,6 +7,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { midtrans } from "@/lib/midtrans"
 import { achievementEngine } from "@/lib/achievement-engine"
+import { sendBookingEmail } from "@/lib/email" // Import sendBookingEmail
+import { format } from "date-fns" // Import date-fns for formatting
+import QRCode from "qrcode" // Import qrcode library
 
 export async function POST(request: NextRequest) {
     try {
@@ -40,10 +43,10 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Get booking
+        // Get booking - include user and court details for email
         const booking = await prisma.booking.findUnique({
             where: { id: order_id },
-            include: { payment: true },
+            include: { payment: true, user: true, court: true }, // Include user and court
         })
 
         if (!booking) {
@@ -88,7 +91,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Award loyalty points and achievements if booking is confirmed and has a user
-        if (bookingStatus === "CONFIRMED" && booking.userId) {
+        if (bookingStatus === "CONFIRMED" && booking.userId && booking.user) {
             // Award loyalty points
             const pointsToAward = Math.floor(booking.totalPrice / 10000) * 10;
             if (pointsToAward > 0) {
@@ -111,12 +114,27 @@ export async function POST(request: NextRequest) {
 
             // Check for achievements
             await achievementEngine.checkAndAward(booking.userId, 'booking_confirmed');
-        }
 
-        // TODO: Send confirmation email if booking confirmed
-        // if (bookingStatus === "CONFIRMED") {
-        //     await sendConfirmationEmail(booking)
-        // }
+            // Send confirmation email if booking confirmed
+            try {
+                const bookingConfirmationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/booking/confirmation/${booking.id}`;
+                const qrCodeUrl = await QRCode.toDataURL(bookingConfirmationUrl);
+
+                await sendBookingEmail({
+                    to: booking.user.email,
+                    subject: `Booking Confirmation for ${booking.court.name}`,
+                    bookingId: booking.id,
+                    customerName: booking.user.name || booking.customerName,
+                    courtName: booking.court.name,
+                    date: format(booking.startTime, "PPP"), // Formatted Date
+                    time: `${format(booking.startTime, "p")} - ${format(booking.endTime, "p")}`, // Formatted Time Range
+                    price: booking.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'IDR' }), // Assuming IDR currency
+                    qrCodeUrl: qrCodeUrl,
+                });
+            } catch (emailError) {
+                console.error("[Webhook] Failed to send confirmation email:", emailError);
+            }
+        }
 
         return NextResponse.json(
             {

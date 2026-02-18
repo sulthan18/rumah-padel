@@ -1,6 +1,5 @@
 import { CloudClient, Collection } from "chromadb";
-import { genAI } from "./gemini";
-import { KNOWLEDGE_BASE, KnowledgeDocument } from "./knowledge-base";
+import { KNOWLEDGE_BASE } from "./knowledge-base";
 
 const COLLECTION_NAME = "rumah_padel_knowledge";
 
@@ -10,25 +9,8 @@ let isInitialized = false;
 let initializationError: string | null = null;
 
 /**
- * Simple embedding function using Gemini's embedding model.
- */
-async function getEmbedding(text: string): Promise<number[]> {
-    const model = genAI.getGenerativeModel({ model: "text-embedding-004" });
-    const result = await model.embedContent(text);
-    return result.embedding.values;
-}
-
-async function getEmbeddings(texts: string[]): Promise<number[][]> {
-    const embeddings: number[][] = [];
-    for (const text of texts) {
-        const embedding = await getEmbedding(text);
-        embeddings.push(embedding);
-    }
-    return embeddings;
-}
-
-/**
  * Initialize the ChromaDB Cloud client and seed the collection if empty.
+ * Uses ChromaDB's built-in embedding function (no Gemini quota needed).
  */
 export async function initVectorStore(): Promise<void> {
     if (isInitialized) return;
@@ -41,7 +23,7 @@ export async function initVectorStore(): Promise<void> {
             database: process.env.CHROMA_DATABASE || "padel",
         });
 
-        // Get or create collection
+        // Get or create collection (uses ChromaDB's default embedding function)
         collection = await chromaClient.getOrCreateCollection({
             name: COLLECTION_NAME,
             metadata: { description: "Rumah Padel knowledge base for RAG chatbot" },
@@ -68,18 +50,20 @@ export async function initVectorStore(): Promise<void> {
     }
 }
 
+/**
+ * Seed the collection with knowledge base documents.
+ * ChromaDB generates embeddings server-side using its default embedding function.
+ */
 async function seedCollection(col: Collection): Promise<void> {
     const ids = KNOWLEDGE_BASE.map((doc) => doc.id);
     const documents = KNOWLEDGE_BASE.map((doc) => doc.content);
     const metadatas = KNOWLEDGE_BASE.map((doc) => doc.metadata);
 
-    const embeddings = await getEmbeddings(documents);
-
+    // Don't pass embeddings — let ChromaDB's server-side embedding handle it
     await col.add({
         ids,
         documents,
         metadatas,
-        embeddings,
     });
 }
 
@@ -94,10 +78,9 @@ export async function queryRelevantDocs(
     // Try ChromaDB first
     if (isInitialized && collection) {
         try {
-            const queryEmbedding = await getEmbedding(query);
-
+            // ChromaDB handles embedding the query text server-side
             const results = await collection.query({
-                queryEmbeddings: [queryEmbedding],
+                queryTexts: [query],
                 nResults,
             });
 
@@ -111,7 +94,7 @@ export async function queryRelevantDocs(
         }
     }
 
-    // Fallback: simple keyword-based search using Gemini embeddings or keyword matching
+    // Fallback: simple keyword-based search
     return fallbackSearch(query, nResults);
 }
 
@@ -127,7 +110,7 @@ function fallbackSearch(query: string, nResults: number): string[] {
         let score = 0;
 
         for (const word of queryWords) {
-            if (word.length < 3) continue; // Skip short words
+            if (word.length < 3) continue;
             if (content.includes(word)) {
                 score += 1;
             }

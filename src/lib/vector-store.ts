@@ -1,10 +1,10 @@
-import { ChromaClient, Collection } from "chromadb";
+import { CloudClient, Collection } from "chromadb";
 import { genAI } from "./gemini";
 import { KNOWLEDGE_BASE, KnowledgeDocument } from "./knowledge-base";
 
 const COLLECTION_NAME = "rumah_padel_knowledge";
 
-let chromaClient: ChromaClient | null = null;
+let chromaClient: CloudClient | null = null;
 let collection: Collection | null = null;
 let isInitialized = false;
 let initializationError: string | null = null;
@@ -28,17 +28,18 @@ async function getEmbeddings(texts: string[]): Promise<number[][]> {
 }
 
 /**
- * Initialize the ChromaDB client and seed the collection if empty.
+ * Initialize the ChromaDB Cloud client and seed the collection if empty.
  */
 export async function initVectorStore(): Promise<void> {
     if (isInitialized) return;
     if (initializationError) return;
 
     try {
-        chromaClient = new ChromaClient({ path: "http://localhost:8000" });
-
-        // Test connection
-        await chromaClient.heartbeat();
+        chromaClient = new CloudClient({
+            apiKey: process.env.CHROMA_API_KEY || "",
+            tenant: process.env.CHROMA_TENANT || "",
+            database: process.env.CHROMA_DATABASE || "padel",
+        });
 
         // Get or create collection
         collection = await chromaClient.getOrCreateCollection({
@@ -49,17 +50,17 @@ export async function initVectorStore(): Promise<void> {
         // Check if already seeded
         const existingCount = await collection.count();
         if (existingCount === 0) {
-            console.log("Seeding ChromaDB with knowledge base...");
+            console.log("Seeding ChromaDB Cloud with knowledge base...");
             await seedCollection(collection);
-            console.log("ChromaDB seeded successfully.");
+            console.log("ChromaDB Cloud seeded successfully.");
         } else {
-            console.log(`ChromaDB already has ${existingCount} documents.`);
+            console.log(`ChromaDB Cloud already has ${existingCount} documents.`);
         }
 
         isInitialized = true;
     } catch (error: any) {
         console.warn(
-            "ChromaDB not available, falling back to in-memory search:",
+            "ChromaDB Cloud not available, falling back to keyword search:",
             error.message
         );
         initializationError = error.message;

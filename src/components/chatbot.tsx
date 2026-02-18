@@ -146,7 +146,7 @@ export function Chatbot() {
                                 <div>
                                     <h3 className="font-bold text-sm">Rumah Padel AI</h3>
                                     <p className="text-xs text-blue-100">
-                                        Powered by Gemini ✨
+                                        Powered by Rudel ✨
                                     </p>
                                 </div>
                             </div>
@@ -191,8 +191,8 @@ export function Chatbot() {
                                     </Avatar>
                                     <div
                                         className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${message.role === "user"
-                                                ? "bg-blue-600 text-white rounded-br-md"
-                                                : "bg-white text-gray-800 border rounded-bl-md"
+                                            ? "bg-blue-600 text-white rounded-br-md"
+                                            : "bg-white text-gray-800 border rounded-bl-md"
                                             }`}
                                     >
                                         <p className="whitespace-pre-wrap">{message.content}</p>
@@ -257,7 +257,7 @@ export function Chatbot() {
                                 </Button>
                             </div>
                             <p className="text-[10px] text-gray-400 text-center mt-2">
-                                Powered by Google Gemini & ChromaDB RAG
+                                Powered by Rudel
                             </p>
                         </div>
                     </motion.div>

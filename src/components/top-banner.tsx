@@ -24,6 +24,7 @@ export function TopBanner() {
                 <button
                     onClick={() => setIsVisible(false)}
                     className="hidden md:block hover:bg-white/20 p-1 rounded-full transition-colors absolute right-4 md:static"
+                    aria-label="Tutup banner promo"
                 >
                     <X className="h-4 w-4" />
                 </button>

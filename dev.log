@@ -1,0 +1,18 @@
+
+> rumah-padel@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1799ms
+○ Compiling / ...
+ GET / 200 in 9.1s (compile: 7.8s, render: 1314ms)
+○ Compiling /api/auth/[...nextauth] ...
+[next-auth][warn][NEXTAUTH_URL]
+https://next-auth.js.org/warnings#nextauth_url
+[next-auth][warn][NO_SECRET]
+https://next-auth.js.org/warnings#no_secret

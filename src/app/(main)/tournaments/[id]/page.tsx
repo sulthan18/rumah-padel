@@ -57,6 +57,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                                 </div>
                                 <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">
                                     {tournament.name}
+                                </h1>
                             </div>
                             <div className="flex gap-6 text-zinc-400 font-medium">
                                 <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {tournament.startDate.toLocaleDateString()}</span>
@@ -70,10 +71,9 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                                 {tournament.status === 'REGISTRATION' ? 'Register Team' : 'Registration Closed'}
                             </Button>
                         </div>
+                    </FadeIn>
                 </div>
-            </FadeIn>
-        </div>
-            </div >
+            </div>
 
         {/* Main Content */ }
         < div className = "container mx-auto px-4 -mt-20 relative z-20" >

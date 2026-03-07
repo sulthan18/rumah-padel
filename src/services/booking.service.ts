@@ -132,7 +132,12 @@ export function validateBookingInput(startTime: Date, endTime: Date) {
 
     // Check if within business hours
     const startHour = startTime.getHours()
-    const endHour = endTime.getHours()
+    let endHour = endTime.getHours()
+
+    // If end time is exactly midnight (0 hours, 0 mins), it's the next day, which counts as 24
+    if (endHour === 0 && endTime.getMinutes() === 0) {
+        endHour = 24
+    }
 
     if (
         startHour < BUSINESS_HOURS.openTime ||

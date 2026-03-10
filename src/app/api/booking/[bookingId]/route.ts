@@ -112,15 +112,17 @@ export async function DELETE(
             },
         });
 
-        for (const entry of waitlistEntries) {
-            await sendWaitlistNotificationEmail({
-                to: entry.user.email,
-                customerName: entry.user.name || 'Player',
-                courtName: booking.court.name,
-                date: booking.startTime.toLocaleDateString(),
-                time: booking.startTime.toLocaleTimeString(),
-            });
-        }
+        await Promise.all(
+            waitlistEntries.map(entry =>
+                sendWaitlistNotificationEmail({
+                    to: entry.user.email,
+                    customerName: entry.user.name || 'Player',
+                    courtName: booking.court.name,
+                    date: booking.startTime.toLocaleDateString(),
+                    time: booking.startTime.toLocaleTimeString(),
+                })
+            )
+        );
         
         await prisma.waitlistEntry.deleteMany({
             where: {

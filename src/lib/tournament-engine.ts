@@ -45,13 +45,18 @@ export class TournamentEngine {
         // Strategy: Fill Team A of all matches first, then Team B.
 
         let teamIndex = 0
+        const updatePromises: Promise<any>[] = []
+        const byeMatchIds: string[] = []
+
         for (const match of leafMatches) {
             // Slot A
             if (teamIndex < teams.length) {
-                await prisma.tMatch.update({
-                    where: { id: match.id },
-                    data: { teamAId: teams[teamIndex].id }
-                })
+                updatePromises.push(
+                    prisma.tMatch.update({
+                        where: { id: match.id },
+                        data: { teamAId: teams[teamIndex].id }
+                    })
+                )
                 teamIndex++
             }
 
@@ -59,17 +64,30 @@ export class TournamentEngine {
             // If we have N teams and S slots, slots N+1..S are empty -> implied BYE.
             // If slot B is empty, the logic needs to auto-advance Team A.
             if (teamIndex < teams.length) {
-                await prisma.tMatch.update({
-                    where: { id: match.id },
-                    data: { teamBId: teams[teamIndex].id }
-                })
+                updatePromises.push(
+                    prisma.tMatch.update({
+                        where: { id: match.id },
+                        data: { teamBId: teams[teamIndex].id }
+                    })
+                )
                 teamIndex++
             } else {
                 // Determine BYE. 
                 // In our model, if TeamB is NULL, it's a BYE.
                 // We typically auto-advance immediately if it's a BYE.
-                await this.handleBye(match.id)
+                // We must defer auto-advancing until after Slot A is updated, since handleBye reads teamAId.
+                byeMatchIds.push(match.id)
             }
+        }
+
+        // Execute all updates concurrently
+        if (updatePromises.length > 0) {
+            await Promise.all(updatePromises)
+        }
+
+        // Process byes concurrently after match slots are filled
+        if (byeMatchIds.length > 0) {
+            await Promise.all(byeMatchIds.map(matchId => this.handleBye(matchId)))
         }
     }
 

@@ -57,26 +57,25 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                                 </div>
                                 <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-4">
                                     {tournament.name}
+                                </h1>
+                                <div className="flex gap-6 text-zinc-400 font-medium">
+                                    <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {tournament.startDate.toLocaleDateString()}</span>
+                                    <span className="flex items-center gap-2"><Trophy className="w-4 h-4" /> {tournament.prizePool || "Prize Pool TBD"}</span>
+                                    <span className="flex items-center gap-2"><Users className="w-4 h-4" /> {tournament.teams.length} / {tournament.maxTeams} Teams</span>
+                                </div>
                             </div>
-                            <div className="flex gap-6 text-zinc-400 font-medium">
-                                <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {tournament.startDate.toLocaleDateString()}</span>
-                                <span className="flex items-center gap-2"><Trophy className="w-4 h-4" /> {tournament.prizePool || "Prize Pool TBD"}</span>
-                                <span className="flex items-center gap-2"><Users className="w-4 h-4" /> {tournament.teams.length} / {tournament.maxTeams} Teams</span>
+                            <div>
+                                <Button size="lg" className="rounded-full px-8 font-bold text-lg h-14" disabled={tournament.status !== 'REGISTRATION'}>
+                                    {tournament.status === 'REGISTRATION' ? 'Register Team' : 'Registration Closed'}
+                                </Button>
                             </div>
                         </div>
-
-                        <div>
-                            <Button size="lg" className="rounded-full px-8 font-bold text-lg h-14" disabled={tournament.status !== 'REGISTRATION'}>
-                                {tournament.status === 'REGISTRATION' ? 'Register Team' : 'Registration Closed'}
-                            </Button>
-                        </div>
+                    </FadeIn>
                 </div>
-            </FadeIn>
-        </div>
-            </div >
+            </div>
 
-        {/* Main Content */ }
-        < div className = "container mx-auto px-4 -mt-20 relative z-20" >
+            {/* Main Content */}
+            <div className="container mx-auto px-4 -mt-20 relative z-20">
             <div className="bg-white rounded-3xl shadow-xl border border-zinc-200 overflow-hidden min-h-[600px]">
                 <Tabs defaultValue="bracket" className="w-full">
                     <div className="border-b border-zinc-200 bg-zinc-50/50 px-8 py-4">
@@ -138,7 +137,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                     </TabsContent>
                 </Tabs>
             </div>
-            </div >
-        </div >
+        </div>
+        </div>
     )
 }

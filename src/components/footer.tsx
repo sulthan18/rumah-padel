@@ -15,13 +15,13 @@ export function Footer() {
                             Ciptakan momen seru di lapangan padel terbaik. Fasilitas standar internasional, komunitas solid, dan pengalaman main yang tak terlupakan.
                         </p>
                         <div className="flex gap-4">
-                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Instagram Padel Flow">
                                 <Instagram className="h-5 w-5" />
                             </Link>
-                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Facebook Padel Flow">
                                 <Facebook className="h-5 w-5" />
                             </Link>
-                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                            <Link href="#" className="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors" aria-label="Twitter Padel Flow">
                                 <Twitter className="h-5 w-5" />
                             </Link>
                         </div>

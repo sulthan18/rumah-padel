@@ -116,6 +116,7 @@ export function Chatbot() {
                             onClick={() => setIsOpen(true)}
                             size="lg"
                             className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 transition-all hover:scale-110 relative"
+                            aria-label="Buka chat asisten virtual"
                         >
                             <MessageCircle className="h-7 w-7" />
                             <span className="absolute -top-1 -right-1 h-4 w-4 bg-green-400 rounded-full border-2 border-white animate-pulse" />
@@ -155,6 +156,7 @@ export function Chatbot() {
                                 size="icon"
                                 className="text-white hover:bg-white/20 rounded-full h-8 w-8"
                                 onClick={() => setIsOpen(false)}
+                                aria-label="Tutup chat asisten virtual"
                             >
                                 <X className="h-4 w-4" />
                             </Button>
@@ -248,6 +250,7 @@ export function Chatbot() {
                                     size="icon"
                                     disabled={!input.trim() || isLoading}
                                     className="h-10 w-10 rounded-full bg-blue-600 hover:bg-blue-700 shrink-0 transition-all disabled:opacity-50"
+                                    aria-label="Kirim pesan"
                                 >
                                     {isLoading ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />

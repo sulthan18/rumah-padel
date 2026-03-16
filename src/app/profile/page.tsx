@@ -88,7 +88,7 @@ export default async function ProfilePage() {
                                     </div>
                                     <div className="font-medium">Riwayat Booking</div>
                                 </div>
-                                <Button size="icon" variant="ghost" className="h-8 w-8">
+                                <Button size="icon" variant="ghost" className="h-8 w-8" aria-label="Lihat riwayat booking">
                                     →
                                 </Button>
                             </div>

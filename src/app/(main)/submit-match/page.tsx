@@ -140,6 +140,7 @@ export default function SubmitMatchPage() {
                             size="icon"
                             className="h-12 w-12 rounded-full"
                             onClick={() => onScoreChange(Math.max(0, score - 1))}
+                            aria-label="Kurangi skor"
                         >
                             -
                         </Button>
@@ -150,6 +151,7 @@ export default function SubmitMatchPage() {
                             size="icon"
                             className="h-12 w-12 rounded-full"
                             onClick={() => onScoreChange(score + 1)}
+                            aria-label="Tambah skor"
                         >
                             +
                         </Button>

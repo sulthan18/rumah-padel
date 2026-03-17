@@ -48,7 +48,7 @@ export function UserMenu() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all" aria-label="Buka menu pengguna">
                     <Avatar className="h-10 w-10">
                         <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
                         <AvatarFallback className="bg-primary/10 text-primary font-bold">{initials}</AvatarFallback>

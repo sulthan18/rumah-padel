@@ -39,7 +39,7 @@ export class BookingEngine {
         user: User | null,
         promoCodeStr?: string
     ) {
-        let basePrice = court.pricePerHour * slots.length
+        const basePrice = court.pricePerHour * slots.length
         let discount = 0
         let discountSource = null
         let promoCodeId = null

@@ -58,10 +58,11 @@ export function CourtFilters() {
                     <div className="space-y-8">
                         {/* Search Bar */}
                         <div className="space-y-2">
-                            <Label className="text-zinc-500 font-semibold uppercase text-xs tracking-wider">Search</Label>
+                            <Label htmlFor="court-search" className="text-zinc-500 font-semibold uppercase text-xs tracking-wider">Search</Label>
                             <div className="relative">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                                 <input
+                                    id="court-search"
                                     type="text"
                                     placeholder="Find your court..."
                                     className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-medium placeholder:text-zinc-400"

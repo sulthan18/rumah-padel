@@ -1,0 +1,51 @@
+
+> rumah-padel@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+
+✓ Starting...
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+✓ Ready in 1282ms
+Error: Route "/courts" used `searchParams.q`. `searchParams` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at CourtsPage (src/app/(main)/courts/page.tsx:26:32)
+  24 | }) {
+  25 |     // 1. Parse Params
+> 26 |     const query = searchParams.q || ""
+     |                                ^
+  27 |     const currentPage = Number(searchParams.page) || 1
+  28 |     const pageSize = 6
+  29 |     const skip = (currentPage - 1) * pageSize
+⨯ Error [PrismaClientInitializationError]:
+Invalid `{imported module ./src/lib/prisma.ts}["prisma"].court.count()` invocation in
+/app/.next/dev/server/chunks/ssr/[root-of-the-server]__1bc73aca._.js:813:142
+
+  810 }
+  811 // 3. Fetch Data (Parallel Count & Find)
+  812 const [totalCourts, courts] = await Promise.all([
+→ 813     {imported module ./src/lib/prisma.ts}["prisma"].court.count(
+error: Environment variable not found: DATABASE_URL.
+  -->  schema.prisma:7
+   |
+ 6 |   provider  = "postgresql"
+ 7 |   url       = env("DATABASE_URL")
+   |
+
+Validation Error Count: 1
+    at <unknown> (src/app/(main)/courts/page.tsx:56:22)
+    at <unknown> (-->  schema.prisma:7)
+    at async CourtsPage (src/app/(main)/courts/page.tsx:55:35)
+  54 |     // 3. Fetch Data (Parallel Count & Find)
+  55 |     const [totalCourts, courts] = await Promise.all([
+> 56 |         prisma.court.count({ where }),
+     |                      ^
+  57 |         prisma.court.findMany({
+  58 |             where,
+  59 |             orderBy: { name: "asc" }, {
+  clientVersion: '5.22.0',
+  errorCode: undefined,
+  digest: '3111816697'
+}
+ GET /courts 500 in 1411ms (compile: 485ms, render: 926ms)

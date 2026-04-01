@@ -259,12 +259,12 @@ export async function createBooking(
  */
 export async function getUserBookings(
     userId: string,
-    status?: BookingStatus
+    status?: BookingStatus | undefined
 ) {
     const bookings = await prisma.booking.findMany({
         where: {
             userId,
-            ...(status && { status }),
+            ...(status && { status: status as any }),
         },
         include: {
             court: {

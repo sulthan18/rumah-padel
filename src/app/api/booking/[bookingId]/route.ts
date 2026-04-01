@@ -85,9 +85,10 @@ export async function GET(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { bookingId: string } }
+    props: { params: Promise<{ bookingId: string }> }
 ) {
     try {
+        const params = await props.params
         const booking = await prisma.booking.findUnique({
             where: { id: params.bookingId },
             include: { court: true }

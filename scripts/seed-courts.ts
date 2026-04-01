@@ -70,6 +70,12 @@ async function main() {
         console.log("Error deleting courts (maybe table empty):", e)
     }
 
+    const provider = await prisma.courtProvider.upsert({
+        where: { id: "provider-1" },
+        update: { name: "Rumah Padel Provider" },
+        create: { id: "provider-1", name: "Rumah Padel Provider" },
+    })
+
     for (let i = 0; i < COURTS_DATA.length; i++) {
         const data = COURTS_DATA[i]
         // Cycle through images
@@ -83,7 +89,8 @@ async function main() {
                 surface: data.surface as CourtSurface,
                 pricePerHour: data.price,
                 imageUrl: imageUrl,
-                isActive: true
+                isActive: true,
+                courtProviderId: provider.id
             }
         })
         console.log(`Created: ${data.name}`)

@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
                     to: booking.user.email,
                     subject: `Booking Confirmation for ${booking.court.name}`,
                     bookingId: booking.id,
-                    customerName: booking.user.name || booking.customerName,
+                    customerName: booking.user.name || booking.customerName || "Player",
                     courtName: booking.court.name,
                     date: format(booking.startTime, "PPP"), // Formatted Date
                     time: `${format(booking.startTime, "p")} - ${format(booking.endTime, "p")}`, // Formatted Time Range

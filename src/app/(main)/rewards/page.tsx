@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 export default function RewardsPage() {
     const { data: session } = useSession();
     const [rewards, setRewards] = useState([]);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<any>(null);
 
     async function fetchRewards() {
         const res = await fetch('/api/rewards');

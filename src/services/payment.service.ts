@@ -4,7 +4,16 @@
  */
 
 import { prisma } from "@/lib/prisma"
-import { PAYMENT_PROVIDERS, PAYMENT_STATUS } from "@/lib/constants"
+const PAYMENT_PROVIDERS = {
+    SIMULATION: "SIMULATION",
+    MIDTRANS: "MIDTRANS",
+}
+
+const PAYMENT_STATUS = {
+    SUCCESS: "SUCCESS",
+    FAILED: "FAILED",
+    PENDING: "PENDING",
+}
 
 /**
  * Simulate a payment for a booking

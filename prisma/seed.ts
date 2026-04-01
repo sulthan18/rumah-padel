@@ -29,11 +29,18 @@ async function main() {
 
     console.log('Seeding database...')
 
+    // Create a dummy court provider to associate with courts
+    const provider = await prisma.courtProvider.upsert({
+        where: { id: "provider-1" },
+        update: { name: "Rumah Padel Provider" },
+        create: { id: "provider-1", name: "Rumah Padel Provider" },
+    })
+
     for (const court of courts) {
         const result = await prisma.court.upsert({
             where: { id: court.id },
-            update: court,
-            create: court,
+            update: { ...court, courtProviderId: provider.id },
+            create: { ...court, courtProviderId: provider.id },
         })
         console.log(`Upserted court: ${result.name} (${result.id})`)
     }

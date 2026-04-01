@@ -2,7 +2,7 @@ import { Resend } from "resend"
 import { BookingConfirmationEmail } from "@/emails/booking-confirmation"
 import { WaitlistNotificationEmail } from "@/emails/waitlist-notification"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || "dummy_key")
 
 interface SendBookingEmailProps {
     to: string

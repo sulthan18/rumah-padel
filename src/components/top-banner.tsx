@@ -23,6 +23,7 @@ export function TopBanner() {
                 </div>
                 <button
                     onClick={() => setIsVisible(false)}
+                    aria-label="Tutup banner promo"
                     className="hidden md:block hover:bg-white/20 p-1 rounded-full transition-colors absolute right-4 md:static"
                 >
                     <X className="h-4 w-4" />

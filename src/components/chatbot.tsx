@@ -115,6 +115,7 @@ export function Chatbot() {
                         <Button
                             onClick={() => setIsOpen(true)}
                             size="lg"
+                            aria-label="Buka chat"
                             className="h-16 w-16 rounded-full shadow-2xl bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 transition-all hover:scale-110 relative"
                         >
                             <MessageCircle className="h-7 w-7" />
@@ -153,6 +154,7 @@ export function Chatbot() {
                             <Button
                                 variant="ghost"
                                 size="icon"
+                                aria-label="Tutup chat"
                                 className="text-white hover:bg-white/20 rounded-full h-8 w-8"
                                 onClick={() => setIsOpen(false)}
                             >
@@ -246,6 +248,7 @@ export function Chatbot() {
                                 <Button
                                     onClick={sendMessage}
                                     size="icon"
+                                    aria-label="Kirim pesan"
                                     disabled={!input.trim() || isLoading}
                                     className="h-10 w-10 rounded-full bg-blue-600 hover:bg-blue-700 shrink-0 transition-all disabled:opacity-50"
                                 >
